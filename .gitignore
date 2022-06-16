@@ -6,3 +6,9 @@
 
 # video file
 *.mov
+
+# docker ignore
+.dockerignore
+
+# c object directory
+obj
