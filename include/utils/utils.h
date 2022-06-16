@@ -39,7 +39,7 @@ void add_help_option(char argc, char **argv)
         if(is_str_same(argv[i], "--help")) break;
         if(i==argc-1) return;
     }
-    char *filename = calloc(strlen(argv[0])+1,sizeof(char));
+    char *filename = (char*)calloc(strlen(argv[0])+1,sizeof(char));
     strncpy(filename,argv[0]+2,strlen(argv[0]+2));
     str_insert(&filename, "help/",0);
     str_insert(&filename, ".help",strlen(filename));
