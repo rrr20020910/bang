@@ -2,6 +2,10 @@
 
 ## Introduce
 <!-- TODO: introduce bang game -->
+"Bang!" is a faction-competition based game with the old-fashion western shoot-out theme.  
+The Sheriff, the Outlaws, and the Renegade, each faction has thier own mission to achieve.  
+With many kinds of characters and items, you can plot your own strategies with your teammate to hunt down your targets!  
+Well, there's not only just strategy involved, you also need some luck to find the way to victory!  
 
 ## How to Play
 If you want to play Bang! with music please make sure you install sox
