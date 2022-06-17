@@ -26,7 +26,7 @@
 #define CARABINE    221
 #define WINCHESTER  222
 
-#define SIDE 0
+#define SIDE 0 //range == 0 means two sides
 
 typedef struct _sCard Card;
 typedef struct _sPlayer Player;
