@@ -18,12 +18,12 @@ sox --version # make sure you successfully install sox
 
 For original version
 ```bash
-./main 
+./bin/main 
 ```
 
 If you want to enjoy music in game
 ```bash
-(play Per_qualche.mp3 -q repeat 32) & ./main
+(play ./assets/background.mp3 -q repeat 32) & ./bin/main
 ```
 
 In Docker version, to initialize docker environment
