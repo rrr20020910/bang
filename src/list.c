@@ -1,5 +1,6 @@
 #include "utils/cstd.h"
-#include"list.h"
+#include "forward_declaration.h"
+#include "list.h"
 #include "player.h"
 
 void free_list(List *game)
@@ -15,8 +16,8 @@ void free_list(List *game)
     return;
 }
 
-void build_list(List *game,Player bot)
-{    
+void build_list(List *game,Player bot){
+    
     Player *new;
     new = (Player*)malloc(sizeof(Player));
     
@@ -38,6 +39,6 @@ void build_list(List *game,Player bot)
     }
     current->next = new;
     new->next = sheriff;
-    
+
     return;
 }

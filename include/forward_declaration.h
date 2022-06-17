@@ -1,7 +1,8 @@
 #pragma once
 
-#define CARD_NUM 70
-#define CARD_TPYE 15
+#define CARD_NUM 80
+#define CARD_TPYE 22
+#define PILE_NUM 200
 
 #define MAX_CARD_HOLD 18
 
@@ -16,12 +17,16 @@
 #define DYNAMITE 214
 #define BARREL   215
 
-#define MAX_HAND_PRINT 6
+#define MUSTANG     216
+#define APPALOOSA   217
 
-#define CARD_WIDTH   17
-#define CARD_LENGTH  12
+#define SCHOFIELD   218
+#define VOLANIC     219
+#define REMINGTON   220
+#define CARABINE    221
+#define WINCHESTER  222
 
-#define CARD_IMG_FILEPATH "./assets/card-image"
+#define SIDE 0
 
 typedef struct _sCard Card;
 typedef struct _sPlayer Player;
@@ -34,7 +39,6 @@ typedef struct _sCard
     int32_t (*ability)(List*,Player*);
     int32_t suit;
     int32_t face;
-    int32_t is_available;
 }Card;
 
 typedef struct _sPlayer
@@ -58,13 +62,17 @@ typedef struct _sList
     int32_t players_num;
     int32_t bang_play;
     int32_t win_role;
-    int32_t pos;
     
     int32_t card_page;
+    int32_t isInJail;
+
+    int32_t pile_pos;
+    Card pile[PILE_NUM];
+
+    int32_t discard_pos;
+    Card discard_pile[PILE_NUM];
     
-    Card pile[CARD_NUM];
     Card *current_card;
-    //Player *current_player;
     Player *next;
 }List;
 

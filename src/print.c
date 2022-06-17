@@ -1,6 +1,15 @@
 #include "utils/cstd.h"
-#include "card.h"
+#include "forward_declaration.h"
+#include "print.h"
+#include "list.h"
 #include "player.h"
+#include "card.h"
+
+#define MAX_HAND_PRINT 6
+
+#define CARD_WIDTH   17
+#define CARD_LENGTH  12
+#define CARD_IMG_FILEPATH "./assets/card-image"
 
 static void gotoxy(int32_t x,int32_t y)
 {
@@ -18,7 +27,7 @@ static void print_frame(int32_t x,int32_t y,int32_t w,int32_t h)
         printf("=");
     }
     printf("\\");
-    
+
     //print body
     for(int i=0;i<(h-2);i++)
     {
@@ -27,7 +36,7 @@ static void print_frame(int32_t x,int32_t y,int32_t w,int32_t h)
         gotoxy(x+w-1,y+i+1);
         printf("|");
     }
-    
+
     //print tail
     gotoxy(x,y+h-1);
     printf("\\");
@@ -42,7 +51,8 @@ static void print_frame(int32_t x,int32_t y,int32_t w,int32_t h)
 //role 
 static void print_role(int32_t x,int32_t y,Player *bot){
     
-    if(bot->role_ID == SHERIFF){
+    if(bot->role_ID == SHERIFF)
+    {
         gotoxy(x,y);
         printf("__/\\__");
         gotoxy(x,y+1);
@@ -53,7 +63,8 @@ static void print_role(int32_t x,int32_t y,Player *bot){
         printf("  \\/  ");
         return;
     }
-    if(bot->role_ID == DEPUTY_SHERIFF){
+    if(bot->role_ID == DEPUTY_SHERIFF)
+    {
         gotoxy(x,y);
         printf("  /\\");
         gotoxy(x,y+1);
@@ -64,7 +75,8 @@ static void print_role(int32_t x,int32_t y,Player *bot){
         printf("  \\/  ");
         return;
     }
-    if(bot->role_ID == OUTLAW){
+    if(bot->role_ID == OUTLAW)
+    {
         gotoxy(x,y);
         printf("_/v\\_");
         gotoxy(x,y+1);
@@ -75,7 +87,8 @@ static void print_role(int32_t x,int32_t y,Player *bot){
         printf("  /\\");
         return;
     }
-    if(bot->role_ID == RENEGADE){
+    if(bot->role_ID == RENEGADE)
+    {
         gotoxy(x,y);
         printf("{_/\\_}");
         gotoxy(x,y+1);
@@ -86,14 +99,13 @@ static void print_role(int32_t x,int32_t y,Player *bot){
         printf("  \\/  ");
         return;
     }
-    return;
 }
 
 //gear
-static void print_player_visual(int32_t x,int32_t y,Player *bot)
-{
+static void print_player_visual(int32_t x,int32_t y,Player *bot){
+
     print_frame(x,y,35,13);
-    
+
     //name
     gotoxy(x+2,y+1);
     printf("%s",bot->user_name);
@@ -121,13 +133,14 @@ static void print_player_visual(int32_t x,int32_t y,Player *bot)
     printf("\\_|_/");
     
     //gear
-    int32_t g_x = x+21, g_y = y+3;
+    int32_t g_x = x+21,g_y = y+3;
+    
     for(int i = 0;i<6;i++)
     {
         gotoxy(g_x,g_y+i);
         if(bot->gear_num > i)
         {
-            printf("[ gear ]");
+            printf("[ %s ]",bot->gear[i].name);
         }
         else
         {
@@ -177,21 +190,32 @@ static void print_player_visual(int32_t x,int32_t y,Player *bot)
         gotoxy(x+last_pos*4+6,y+11);
         printf("...[%d]\n",over);
     }
-    
-    //select num
-    
-    return;
 }
 
-static void print_card_visual(int32_t x,int32_t y,int32_t card_ID)
-{
+static void print_card_visual(int32_t x,int32_t y,int32_t card_ID){
     FILE *pfile = NULL;
     if((pfile=fopen(CARD_IMG_FILEPATH,"r"))==NULL)
     {
-        printf("Can't open this file\n");
+        printf("can't open this file\n");
         return;
     }
-    fseek(pfile,(CARD_WIDTH-1)*CARD_LENGTH*card_ID,SEEK_SET);
+    
+    int32_t card_pos = card_ID%100;
+    
+    fseek(pfile,(CARD_WIDTH-1)*CARD_LENGTH*card_pos,SEEK_SET);
+    
+    if(card_ID/100 == 2)
+    {
+        printf("\033[1;34m");
+    }
+    else if(card_ID == 0)
+    {
+        printf("\033[30m");
+    }
+    else
+    {
+        printf("\033[1;33m");
+    }
     
     for(int i=0;i<CARD_LENGTH;i++)
     {
@@ -200,7 +224,22 @@ static void print_card_visual(int32_t x,int32_t y,int32_t card_ID)
         gotoxy(x,y+i);
         printf("%s",card_pic);
     }
-    printf("\n");
+    printf("\033[0m\n");
+    
+    /* TODO: suit icon
+    () T
+   ()()T
+
+    /\ K
+   (__)K
+   
+   (\/)Q
+    \/ Q
+    
+    /\ 4
+    \/ 4
+    */
+    
     fclose(pfile);
     return;
 }
@@ -250,7 +289,7 @@ static void print_next_turn(int32_t x,int32_t y)
 }
 
 static void print_text(int32_t x,int32_t y)
-{    
+{
     for(int i=0;i<15;i++)
     {
         gotoxy(x,y+i);
@@ -259,8 +298,8 @@ static void print_text(int32_t x,int32_t y)
     return;
 }
 
-void print_board(Player *bot)
-{    
+void print_board(List *game,Player *bot)
+{
     system("clear");
     
     //print ===
@@ -276,7 +315,15 @@ void print_board(Player *bot)
     
     //middle card
     print_card_visual(44,24,0);
-    print_card_visual(62,24,0);
+    gotoxy(44,23);
+    printf("[             ] %d",game->pile_pos);
+    gotoxy(45,23);
+    for(int i=0;i<(80-game->pile_pos)/6;i++)
+    {
+        printf("=");
+    }
+    
+    print_card_visual(62,24,game->discard_pile[game->discard_pos-1].card_ID);
     
     //print other
     Player *current = bot->next;
@@ -298,9 +345,10 @@ void print_board(Player *bot)
     
     for(int i=0;i<6;i++)
     {
-        if(i<(bot->cards_num))
+        int32_t card_pos = i+game->card_page*6;
+        if(card_pos<(bot->cards_num))
         {
-            print_card_visual(9+i*17,40,(bot->hand_card[i].card_ID)%100);
+            print_card_visual(9+i*17,40,(bot->hand_card[card_pos].card_ID));
             gotoxy(14+i*17,51);
             printf("[_%d_]",i+1);
         }
@@ -339,10 +387,18 @@ void print_board(Player *bot)
     printf("abcdefghijkabcdefghijk");
     
     //gear
+    
     for(int i = 0;i<6;i++)
     {
         gotoxy(140,44+i);
-        printf("[ X ]");
+        if(bot->gear_num > i)
+        {
+            printf("[ %s ]",bot->gear[i].name);
+        }
+        else
+        {
+            printf("[ X ]");
+        }
     }
     
     //other
@@ -351,24 +407,16 @@ void print_board(Player *bot)
     print_next_turn(52,37);
     print_text(81,23);
     
+    //page
+    gotoxy(107,39);
+    printf("{ %d }",game->card_page+1);
+    
     gotoxy(1,60);    
     return;
 }
 
 // print           ||     
 //=================\/===
-void print_player(Player *bot)
-{
-    printf("%8s: ",bot->user_name);
-    printf("bullet: %d card_num[%d] gear:",bot->bullets,bot->cards_num);
-    for(int i=0;i<bot->gear_num;i++)
-    {
-        printf("%s,",bot->gear[i].name);
-    }
-    printf("\n");
-    return;   
-}
-
 void print_card(Card crd)
 {
     printf("Card: %s(%d,%d)\n",crd.name,crd.suit,crd.face);
@@ -384,4 +432,3 @@ void print_player_hand(Player *bot)
     }
     return;
 }
-

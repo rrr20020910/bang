@@ -1,14 +1,13 @@
 #include "utils/cstd.h"
-#include"game.h"
-#include"list.h"
-#include"player.h"
-#include"print.h"
+#include "game.h"
+#include "list.h"
+#include "print.h"
+#include "player.h"
+#include "card.h"
 
 int main()
-{
-    int32_t player_num = 6;  // TODO: option num of players
-
-    // TODO: game init function
+{    
+    int32_t player_num = 6;
     List game;
     memset(&game,0,sizeof(List));
     game.next = NULL;
@@ -51,19 +50,23 @@ int main()
     game.next = get_sheriff(&game);
     Player *current = game.next;
     
-    while(1) // TODO: game loop function
+    printf("bugger\n");
+    
+    while(1)
     {
         //stage 1 : draw 2 cards
         draw_stage(&game,current);
         
         //stage 2 : use cards
-        while(1)
+        while(!game.isInJail)
         {
-            print_board(current);
-            if(available(&game,current))
+            print_board(&game,current);
+            
+            if(get_player_move(&game,current))
             {
                 break;
             }
+            
         }
         
         //win check
@@ -75,9 +78,8 @@ int main()
         //stage 3 : discard
         current = current->next;
         game.bang_play = 0;
+        game.isInJail = 0;
     }
-    
-    // TODO: game end function
     free_list(&game);
     return 0;
 }

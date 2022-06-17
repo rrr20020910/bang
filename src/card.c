@@ -2,23 +2,79 @@
 #include "card.h"
 #include "player.h"
 #include "list.h"
-#include "game.h"
 #include "print.h"
 
 // play card       ||     
 //=================\/===
-char *card_name(int32_t card_ID)
+static char *card_name(int32_t card_ID)
 {
     char *name[3] = {"Bang!","Miss","beer"};
     return name[(card_ID%100)-1];
 } 
 
+static int32_t play_specify_card(List *game,Player *bot,int32_t card_id)
+{
+    printf("play %s\n",card_name(card_id));   
+    print_player_hand(bot);
+    printf("%d) I don't want to play\n",bot->cards_num);
+    printf("please select a card:");
+    int32_t sel=0;
+    scanf("%d",&sel);
+    sel--;
+    if(bot->hand_card[sel].card_ID != card_id)
+    {
+        return 0;
+    }
+    
+    Card *current = &(bot->hand_card[sel]);
+    game->discard_pile[game->discard_pos] = *current;
+    game->discard_pos++;
+    
+    for(int i=sel;i<(bot->cards_num);i++)
+    {
+        bot->hand_card[i] = bot->hand_card[i+1];
+    }
+    bot->cards_num--;
+    memset(&(bot->hand_card[bot->cards_num]),0,sizeof(Card));
+    return 1;
+}
+
+// discard random  ||     
+//=================\/===
+static Card *discard_random(List *game,Player *bot)
+{
+    srand(time(NULL));
+    int32_t random_card = rand()%(bot->cards_num); 
+    
+    Card *discard_card = &bot->hand_card[random_card];
+    
+    for(int i=random_card;i<(bot->cards_num);i++)
+    {
+        bot->hand_card[i] = bot->hand_card[i+1];
+    }
+    
+    bot->cards_num--;
+    memset(&(bot->hand_card[bot->cards_num]),0,sizeof(Card));
+    return discard_card;
+}
+
+int32_t gear_check(Player *bot,int32_t gear_ID)
+{
+    for(int i=0;i < bot->gear_num;i++)
+    {
+        if(bot->gear[i].card_ID == gear_ID)
+        {
+            return i+1;
+        }
+    }
+    return 0;
+}
+
 // DIE             ||     
 //=================\/===
-static void die(List *game,Player *bot){
-
+static void die(List *game,Player *bot)
+{
     printf("%s Has been slain!!!\n",bot->user_name);
-    
     if(bot == game->next)
     {
         printf("sheriff DIE\n");
@@ -88,7 +144,38 @@ void damg(List *game,Player *bot)
     return;
 }
 
-// brown card      ||     
+static int32_t get_player_range(Player *bot)
+{
+    int32_t range = 1;
+    if(gear_check(bot,VOLANIC))
+    {
+        return range;
+    }
+    if(gear_check(bot,SCHOFIELD))
+    {
+        range = 2;
+    }
+    if(gear_check(bot,REMINGTON))
+    {
+        range = 3;
+    }
+    if(gear_check(bot,CARABINE))
+    {
+        range = 4;
+    }
+    if(gear_check(bot,WINCHESTER))
+    {
+        range = 5;
+    }
+    
+    if(gear_check(bot,MUSTANG))
+    {
+        range++;
+    }
+    return range;
+}
+
+// brown Card      ||     
 //=================\/===
 static int32_t Bang(List *game,Player *bot)
 {
@@ -98,16 +185,10 @@ static int32_t Bang(List *game,Player *bot)
         return 1;
     }
     
-    if(game->bang_play != 0)
-    {
-        printf("you already play bang\n");
-        return 1;
-    }
-    
     int32_t Miss_flag = 0;
-    
+
     printf("Bang! select a target\n");
-    Player *target = select_range_player(game,bot,1);
+    Player *target = select_range_player(game,bot,get_player_range(bot));
     if(target == NULL)
     {
         printf("It's too far\n");
@@ -130,7 +211,10 @@ static int32_t Bang(List *game,Player *bot)
         damg(game,target);
     }
     
-    game->bang_play++;
+    if(!gear_check(bot,VOLANIC))
+    {
+        game->bang_play++;
+    }
     return 0;
 }
 
@@ -162,7 +246,7 @@ static int32_t Salon(List *game,Player *bot)
 
 static int32_t Miss(List *game,Player *bot)
 {
-    printf("you can't player miss\n");
+    printf("you can't Player miss\n");
     return 1;
 }
 
@@ -177,8 +261,13 @@ static int32_t Beer(List *game,Player *bot)
 
 static int32_t Panic(List *game,Player *bot)
 {
-    Player *target = select_other_player(game,bot);
-    get_card(discard(target),bot);
+    Player *target = select_range_player(game,bot,SIDE);
+    if(target == NULL)
+    {
+        printf("It's too far\n");
+        return 1;
+    }
+    get_card(discard_random(game,target),bot);
     return 0;
 }
 
@@ -192,7 +281,7 @@ static int32_t General_Store(List *game,Player *bot)
     Player *current = bot;
     for(int i=0;i<(game->players_num)-1;i++)
     {
-        //list card
+        //List card
         for(int j=0;j<(game->players_num)-i;j++)
         {
             printf("%d) ",j+1);
@@ -270,60 +359,32 @@ static int32_t Indians(List *game,Player *bot)
     return 0;
 }
 
-/*
-static int32_t Cat_Balou(list *game,player *bot)
+static int32_t Cat_Balou(List *game,Player *bot)
 {
-
-1) random handcard
-2) gun if thy have one
-x)...list target gear
-
-need card_name function
-
-char* (int32_t card_ID){
-
-}
-
-    player *target = select_player(game);
-    int32_t count = 0;
-    
-    int32_t card_flag = 0;
-    int32_t gun_flag = 0;
-    int32_t gear_flag = 0;
-    
-    if(bot->cards_num)
+    Player *target = select_other_player(game,bot);
+       
+    printf("1) disCard random hand card\n");
+    for(int i=0;i < target->gear_num;i++)
     {
-        count++;
-        card_flag++;
-        printf("%d) discard %s random hand card\n",count,bot->user_name);
+        printf("%d) disCard %s\n",i+2,target->gear[i].name);
     }
-    if(bot->gun)
-    {
-        count++;
-        gun_flag++;
-        printf("%d) discard %s gun\n",count,bot->user_name);
-    }
-    for(int i=0;i<bot->gear_num;i++)
-    {
-        count++;
-        gear_flag++;
-        printf("%d) discard %s %s\n",count,bot->user_name,card_name(bot->gear[i]));
-    }
-    printf("Please enter selection : ");
+    printf("Please enter selection :");
     int32_t sel = 0;
     scanf("%d",&sel);
     
-    if(sel == card_flag)
+    if(sel == 1)
     {
-    
+        discard_random(game,target);
+        return 0;
     }
-    if(sel == gun_flag)
+    sel-=2;
+    if(sel <= bot->gear_num)
     {
-    
+        discard_gear(game,target,target->gear[sel].card_ID);
+        return 0;
     }
-    discard_random(target);
+    return 1;
 }
-*/
 
 // blue card       ||     
 //=================\/===
@@ -339,29 +400,59 @@ static int32_t Jail(List *game,Player *bot)
     
     Card *equip = game->current_card;
     target->gear[target->gear_num] = *equip;
-    target->gear_num ++;
-    
+    target->gear_num++;
     return 0;
 }
 
 int32_t Dynamite(List *game,Player *bot)
 {
     bot->gear[bot->gear_num] = *game->current_card;
-    bot->gear_num ++;
-    
+    bot->gear_num++;
     return 0;
 }
 
 static int32_t Barrel(List *game,Player *bot)
-{
-    if(gear_check(bot,game->current_card->card_ID))
+{    
+    if(gear_check(bot,BARREL))
     {
-        printf("you already have %s",game->current_card->name);
+        printf("you already have BARREL");
         return 1;
     }
     bot->gear[bot->gear_num] = *game->current_card;
     bot->gear_num ++;
     
+    return 0;
+}
+
+static int32_t Gun(List *game,Player *bot)
+{
+    for(int i=SCHOFIELD ;i <= WINCHESTER;i++)
+    {
+        if(gear_check(bot,i))
+        {
+            printf("you already have BARREL");
+            return 1;
+        }
+    }
+    bot->gear[bot->gear_num] = *game->current_card;
+    bot->gear_num ++;
+    return 0;
+}
+
+static int32_t Horse(List *game,Player *bot)
+{
+    if(gear_check(bot,MUSTANG))
+    {
+        printf("you already have BARREL");
+        return 1;
+    }
+    if(gear_check(bot,APPALOOSA))
+    {
+        printf("you already have BARREL");
+        return 1;
+    }
+    bot->gear[bot->gear_num] = *game->current_card;
+    bot->gear_num ++;
     return 0;
 }
 
@@ -373,7 +464,7 @@ void build_pile(List *game)
         {"Bang!"         ,101,&Bang},
         {"Miss"          ,102,&Miss},
         {"Beer"          ,103,&Beer},
-        {"Cat_Balou"     ,104,&Duel},
+        {"Cat_Balou"     ,104,&Cat_Balou},
         {"Panic"         ,105,&Panic},
         {"Duel"          ,106,&Duel},
         {"General_Store" ,107,&General_Store},
@@ -384,10 +475,17 @@ void build_pile(List *game)
         {"Stagecoach"    ,112,&Stagecoach},
         {"Jail"          ,213,&Jail},
         {"Dynamite"      ,214,&Dynamite},
-        {"Barrel"        ,215,&Barrel}
+        {"Barrel"        ,215,&Barrel},
+        {"Mustang"       ,216,&Horse},
+        {"Appaloosa"     ,217,&Horse},
+        {"Schofield"     ,218,&Gun},
+        {"Volanic"       ,219,&Gun},
+        {"Remington"     ,220,&Gun},
+        {"Rev.carabine"  ,221,&Gun},
+        {"Winchester"    ,222,&Gun}
     };
                     
-    int32_t every_card_num[CARD_TPYE] = {25,12,6,4,4,3,2,2,1,1,1,2,3,1,3};
+    int32_t every_card_num[CARD_TPYE] = {25,12,6,4,4,3,2,2,1,1,1,2,2,1,3,2,1,3,2,1,1,1};
     
     int32_t count=0;
     for(int i=0;i<CARD_TPYE;i++)
@@ -407,13 +505,14 @@ void build_pile(List *game)
         game->pile[i].face = rand()%13+1;
     }
     
-    for (int i=0;i<CARD_NUM;i++)
+    for(int i=0;i<CARD_NUM;i++)
     {
         int32_t rand_pos = rand()%CARD_NUM;
         Card temp = game->pile[i];
         game->pile[i] = game->pile[rand_pos];
         game->pile[rand_pos] = temp;
     }
-    game->pos = 0;
+    game->pile_pos = 0;
+    game->discard_pos = 0;
     return;
 }

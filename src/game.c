@@ -1,16 +1,84 @@
 #include "utils/cstd.h"
-#include"game.h"
+#include "game.h"
 #include "card.h"
 #include "list.h"
 #include "player.h"
 
-// draw            ||     
+// available move  ||     
 //=================\/===
-Card *draw(List *game)
+int32_t play_card(List *game,Player *bot,int32_t sel)
+{    
+    if(sel > bot->cards_num)
+    {
+        printf("fail play\n");
+        return 0;
+    }
+    
+    Card *current = &(bot->hand_card[sel]);
+    game->current_card = current;
+    
+    if(bot->hand_card[sel].ability(game,bot))
+    {
+        printf("fail play\n");
+        return 0;
+    }
+    
+    if((bot->hand_card[sel].card_ID)/100 == 1)
+    {
+    
+        game->discard_pile[game->discard_pos] = *game->current_card;
+        game->discard_pos++;
+    }
+    
+    for(int i=sel;i<(bot->cards_num);i++)
+    {
+        bot->hand_card[i] = bot->hand_card[i+1];
+    }
+    bot->cards_num--;
+    memset(&(bot->hand_card[bot->cards_num]),0,sizeof(Card));
+    return 0;
+}
+
+int32_t get_player_move(List *game,Player *bot)
 {
-    int32_t ori_pos = game->pos;
-    game->pos++;
-    return &game->pile[ori_pos];
+    //get select
+    printf("please select a move:");
+    int32_t sel=0;
+    scanf("%d",&sel);
+    
+    //1~6 play card
+    if((sel >= 1) && (sel <= 6))
+    {
+        play_card(game,bot,sel+(game->card_page)*6-1);
+    }
+    
+    //0,7 page control
+    if(sel == 0)
+    {
+        if(game->card_page == 0)
+        {
+            printf("you can't do that");
+            return 0;
+        }
+        game->card_page --;
+        return 0;
+    }
+    if(sel == 7)
+    {
+        game->card_page ++;
+        if(game->card_page > 3)
+        {
+            game->card_page = 0;
+        }
+    }
+    
+    //9 leave
+    if(sel == 9)
+    {
+        return 1;
+    }
+    
+    return 0;
 }
 
 // set_player      ||     
@@ -33,47 +101,15 @@ void set_player(List *game,Player *bot)
     return;
 }
 
-// distance        ||     
-//=================\/===
-// range == 0 means two sides
-static int32_t compare(int32_t a,int32_t b)
-{
-    if(a > b) return b;
-    return a;
-}
-
-int32_t get_distance(Player *bot1,Player *bot2)
-{
-    int32_t left = 0;
-    int32_t right = 0;
-    Player *current = bot1;
-    
-    while(current != bot2)
-    {
-        current = current->next;
-        left++;
-    }
-
-    while(current != bot1)
-    {
-        current = current->next;
-        right++;
-    }
-    return compare(right,left);
-}
-
 // sheriff         ||     
 //=================\/===
 Player *get_sheriff(List *game)
-{    
+{
     Player *sheriff = game->next;
-    
     while(sheriff->role_ID != SHERIFF)
     {
         sheriff = sheriff->next;
     }
-    printf("bugger1\n");
-    
     return sheriff;
 }
 
@@ -83,19 +119,25 @@ void draw_stage(List *game,Player *bot)
 {
     game->card_page = 0;
     
-    if(gear_check(bot,JAIL))
-    {
-        bot = bot->next;
-        discard_gear(bot,JAIL);
-    }
-    
     if(gear_check(bot,DYNAMITE))
     {
         damg(game,bot);
-        discard_gear(bot,DYNAMITE);
+        
+        Card *current = &(bot->gear[0]);
+        game->current_card = current;
+        
         Dynamite(game,bot->next);
+        
+        discard_gear(game,bot,DYNAMITE);
     }
     
+    if(gear_check(bot,JAIL))
+    {
+        game->isInJail = 1;
+        discard_gear(game,bot,JAIL);
+        return;
+    }
     get_card(draw(game),bot);
     get_card(draw(game),bot);
+    return;
 }
