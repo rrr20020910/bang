@@ -13,6 +13,9 @@
 #define OUTLAW         3
 #define RENEGADE       4
 
+#define NULL_CARD 0
+#define BLUE_CARD 2
+
 #define BANG 101
 #define BANG_NAME "Bang!"
 

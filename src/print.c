@@ -112,8 +112,8 @@ static void print_role(int32_t x,int32_t y,Player *bot)
 }
 
 // gear
-static void print_player_visual(int32_t x,int32_t y,Player *bot){
-
+static void print_player_visual(int32_t x,int32_t y,Player *bot)
+{
     print_frame(x,y,35,13);
 
     //name
@@ -202,7 +202,8 @@ static void print_player_visual(int32_t x,int32_t y,Player *bot){
     }
 }
 
-static void print_card_visual(int32_t x,int32_t y,int32_t card_ID){
+static void print_card_visual(int32_t x,int32_t y,int32_t card_ID)
+{
     FILE *pfile = NULL;
     if((pfile=fopen(CARD_IMG_FILEPATH,"r"))==NULL)
     {
@@ -214,11 +215,11 @@ static void print_card_visual(int32_t x,int32_t y,int32_t card_ID){
     
     fseek(pfile,(CARD_WIDTH-1)*CARD_LENGTH*card_pos,SEEK_SET);
     
-    if(card_ID/100 == 2)
+    if(card_ID/100 == BLUE_CARD)
     {
         printf("\033[1;34m");
     }
-    else if(card_ID == 0)
+    else if(card_ID == NULL_CARD)
     {
         printf("\033[30m");
     }

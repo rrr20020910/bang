@@ -25,4 +25,3 @@ bin:
 clean:
 	rm $(addprefix bin/, $(MAIN))
 	rm $(OBJ)
-

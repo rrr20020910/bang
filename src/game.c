@@ -138,7 +138,11 @@ void draw_stage(List *game,Player *bot)
         discard_gear(game,bot,JAIL);
         return;
     }
+    
+    pile_remain_manage(game);
+
     get_card(draw(game),bot);
     get_card(draw(game),bot);
     return;
 }
+

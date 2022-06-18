@@ -19,6 +19,12 @@
     } \
 })
 
+#define SWAP_INT(var1,var2) ({ \
+    int32_t temp = var1; \
+    var1 = var2; \
+    var2 = temp; \
+})
+
 #include "fileio.h" //CHECK_VALID in there, put here after CHECK_VALID
 
 //  ANSI Set Graphics Mode

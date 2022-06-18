@@ -271,7 +271,7 @@ static int32_t Salon(List *game,Player *bot)
 
 static int32_t Miss(List *game,Player *bot)
 {
-    WARNING_MSG_PRINT("You can't Player miss\n");
+    WARNING_MSG_PRINT("You can't Player miss");
     usleep(2000000);
     return 1;
 }
@@ -541,4 +541,25 @@ void build_pile(List *game)
     game->pile_pos = 0;
     game->discard_pos = 0;
     return;
+}
+
+void pile_remain_manage(List *game)
+{
+    if(((game->pile)[0]).card_ID == NULL_CARD)
+    {
+        memcpy(game->pile,game->discard_pile,sizeof(Card)*CARD_NUM);
+        memset(&(game->discard_pile),0,sizeof(Card)*CARD_NUM);
+        game->pile_pos = CARD_NUM - game->discard_pos;
+        game->discard_pos = 0;
+
+        srand(time(NULL));
+        
+        for(int i=0;i<CARD_NUM-game->pile_pos;i++)
+        {
+            int32_t rand_pos = rand()%CARD_NUM;
+            Card temp = game->pile[i];
+            game->pile[i] = game->pile[rand_pos];
+            game->pile[rand_pos] = temp;
+        }
+    }
 }
