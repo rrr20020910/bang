@@ -39,12 +39,21 @@ static char *card_name(int32_t card_ID)
 static int32_t play_specify_card(List *game,Player *bot,int32_t card_id)
 {
     INFO_MSG_PRINT("You need to play %s!!",card_name(card_id));
-    int32_t sel=0;
+    
+    int32_t sel = get_temp_player_play(game,bot);
+
     scanf("%d",&sel);
     CHECK_UNTIL(LIMIT_OPTION_RANGE(sel),sel,"Please input valid move!!");
-    
-    sel--;
-    if(bot->hand_card[sel].card_ID != card_id)
+
+    //======Calamity_Janet=====
+    if(bot->charater_ID == Calamity_Janet)
+    {
+        if(card_id == BEER)
+        {
+            return 0;
+        }
+    }
+    else if(bot->hand_card[sel].card_ID != card_id)
     {
         return 0;
     }
@@ -59,12 +68,24 @@ static int32_t play_specify_card(List *game,Player *bot,int32_t card_id)
     }
     bot->cards_num--;
     memset(&(bot->hand_card[bot->cards_num]),0,sizeof(Card));
+    
+    //======Suzy_Lafayette=====
+    if(bot->charater_ID == Suzy_Lafayette)
+    {
+        if(bot->cards_num == 0)
+        {
+            get_card(draw(game),bot);
+        }
+    }
+    //=========================
+    
+    
     return 1;
 }
 
 // discard random  ||     
 //=================\/===
-static Card *discard_random(List *game,Player *bot)
+Card *discard_random(List *game,Player *bot)
 {
     srand(time(NULL));
     int32_t random_card = rand()%(bot->cards_num); 
@@ -78,6 +99,17 @@ static Card *discard_random(List *game,Player *bot)
     
     bot->cards_num--;
     memset(&(bot->hand_card[bot->cards_num]),0,sizeof(Card));
+    
+    //======Suzy_Lafayette=====
+    if(bot->charater_ID == Suzy_Lafayette)
+    {
+        if(bot->cards_num == 0)
+        {
+            get_card(draw(game),bot);
+        }
+    }
+    //=========================
+    
     return discard_card;
 }
 
@@ -110,6 +142,30 @@ static void die(List *game,Player *bot)
         return;
     }
     
+    //======Vulture_Sam=====
+    Player *current = bot;
+    current = current->next;
+    
+    while(current != bot)
+    {
+        if(current->charater_ID == Vulture_Sam)
+        {
+            break;
+        }
+        current=current->next;
+    }
+    
+    if(current->charater_ID == Vulture_Sam)
+    {
+        for(int i=0;i<bot->cards_num;i++){
+            get_card(&bot->hand_card[i],current);
+        }
+        for(int i=0;i<bot->gear_num;i++){
+            get_card(&bot->gear[i],current);
+        }
+    }
+    //=========================
+    
     //delete
     Player *delete = game->next;
     while(delete->next != bot)
@@ -131,7 +187,7 @@ static void die(List *game,Player *bot)
 
 // damg & heal     ||     
 //=================\/===
-static void heal(Player *bot)
+void heal(Player *bot)
 {
     if(bot->bullets < (bot->charater_ID/100))
     {
@@ -143,6 +199,21 @@ static void heal(Player *bot)
 void damg(List *game,Player *bot)
 {
     bot->bullets--;
+    
+    //======Bart_Cassidy======
+    if(bot->charater_ID == Bart_Cassidy){
+        get_card(draw(game),bot);
+    }
+    //========================
+    
+    //=======El_Gringo=======
+    if(bot->charater_ID == El_Gringo){
+        get_card(discard_random(game,game->current_player),bot);
+    }
+    //========================
+    
+    
+    
     if(bot->bullets <= 0)
     {
         Player *current = bot->next;
@@ -191,6 +262,12 @@ static int32_t get_player_range(Player *bot)
         range = 5;
     }
     
+    //======Rose_Doolan======
+    if(bot->charater_ID == Rose_Doolan){
+        range++;
+    }
+    //========================
+    
     if(gear_check(bot,MUSTANG))
     {
         range++;
@@ -221,16 +298,37 @@ static int32_t Bang(List *game,Player *bot)
     
     if(gear_check(target,BARREL))
     {
+        //======Lucky_Duke=====
+        if(bot->charater_ID == Lucky_Duke){
+            Miss_flag++;
+        }
+        //========================
         SYS_BAR_PRINT("%s Miss! because of the BARREL!! It's too lucky!!",target->user_name);
-        usleep(2000000);
         Miss_flag++;
     }
+    
+    //=======Jourdonnais=======
+    if(bot->charater_ID == Jourdonnais){
+        SYS_BAR_PRINT("%s Miss! because of the BARREL!! It's too lucky!!",target->user_name);
+        Miss_flag++;
+    }
+    //========================
     
     if(play_specify_card(game,target,102))
     {
         Miss_flag++;
     }
-    
+    //======Slab_the_Killer=====
+    if(bot->charater_ID == Slab_the_Killer){
+        if(Miss_flag == 1){
+            Miss_flag--;
+            if(play_specify_card(game,target,102))
+            {
+                Miss_flag++;
+            }
+        }
+    }
+    //========================
     if(!Miss_flag)
     {
         damg(game,target);
@@ -240,6 +338,11 @@ static int32_t Bang(List *game,Player *bot)
     {
         game->bang_play++;
     }
+    //======Willy_the_Kid=====
+    if(bot->charater_ID == Willy_the_Kid){
+        game->bang_play = 0;
+    }
+    //========================
     return 0;
 }
 
@@ -271,8 +374,15 @@ static int32_t Salon(List *game,Player *bot)
 
 static int32_t Miss(List *game,Player *bot)
 {
-    WARNING_MSG_PRINT("You can't Player miss");
-    usleep(2000000);
+    //======Calamity_Janet=====
+    if(bot->charater_ID == Calamity_Janet){
+        if(Bang(game,bot)){
+            return 1;
+        }
+        return 0;
+    }
+    //========================
+    WARNING_MSG_PRINT("You can't Player miss\n");
     return 1;
 }
 
@@ -332,6 +442,12 @@ static int32_t General_Store(List *game,Player *bot)
 static int32_t Duel(List *game,Player *bot)
 {
     Player *target = select_other_player(game,bot);
+    
+    if(target == NULL){
+        return 1;
+    }
+    
+    
     Player *current = target;
     
     while(1)
@@ -388,7 +504,10 @@ static int32_t Indians(List *game,Player *bot)
 static int32_t Cat_Balou(List *game,Player *bot)
 {
     Player *target = select_other_player(game,bot);
-       
+    
+    if(target == NULL){
+        return 1;
+    }
     printf("1) disCard random hand card\n");
     for(int i=0;i < target->gear_num;i++)
     {
@@ -418,6 +537,10 @@ static int32_t Jail(List *game,Player *bot)
 {
     printf("Jail select a target\n");
     Player *target = select_other_player(game,bot);
+    
+    if(target == NULL){
+        return 1;
+    }
     
     if(gear_check(target,game->current_card->card_ID))
     {

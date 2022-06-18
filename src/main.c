@@ -43,18 +43,20 @@ int main()
     {
         memset(&bot[i],0,sizeof(Player));
         set_player(&game,&bot[i]);
-        bot[i].role_ID = role_list[i];
         build_list(&game,bot[i]);
     }
+    set_role(&game);
+    set_character(&game);
     
     game.next = get_sheriff(&game);
     Player *current = game.next;
-    
+    game.current_player = current;
     printf("bugger\n");
     
     while(1)
     {
         //stage 1 : draw 2 cards
+        print_board(&game,current);
         draw_stage(&game,current);
         
         //stage 2 : use cards
@@ -76,10 +78,13 @@ int main()
         }
         
         //stage 3 : discard
+        discard_stage(&game,current);
         current = current->next;
-        game.bang_play = 0;
-        game.isInJail = 0;
+        game.current_player = current;
     }
+    
+    win_message(game);
+    
     free_list(&game);
     return 0;
 }

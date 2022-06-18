@@ -26,7 +26,7 @@ static void gotoxy(int32_t x,int32_t y)
     printf("%c[%d;%df",0x1B,y,x);
 }
 
-// must print frist
+//must print frist
 static void print_frame(int32_t x,int32_t y,int32_t w,int32_t h)
 {
     //print head
@@ -94,7 +94,7 @@ static void print_role(int32_t x,int32_t y,Player *bot)
         gotoxy(x,y+2);
         printf(" /|\\L");
         gotoxy(x,y+3);
-        printf("  /\\");
+        printf(" / \\");
         return;
     }
     if(bot->role_ID == RENEGADE)
@@ -111,9 +111,40 @@ static void print_role(int32_t x,int32_t y,Player *bot)
     }
 }
 
-// gear
-static void print_player_visual(int32_t x,int32_t y,Player *bot)
-{
+//role 
+static void print_charater(int32_t x,int32_t y,Player *bot){
+    
+    int c = bot->charater_ID;
+    
+    gotoxy(x,y);
+    
+    switch(c)
+    {
+        case Bart_Cassidy:    printf("Bart Cassidy"); break;
+        case Black_Jack:      printf("Black_Jack"); break;
+        case Calamity_Janet:  printf("Calamity_Janet"); break;
+        case El_Gringo:       printf("El_Gringo"); break;
+        case Jesse_Jones:     printf("Jesse_Jones"); break;
+        case Jourdonnais:     printf("Jourdonnais"); break;
+        case Kit_Carlson:     printf("Kit_Carlson"); break;
+        case Lucky_Duke:      printf("Lucky_Duke"); break;
+        case Paul_Regret:     printf("Paul_Regret"); break;
+        case Pedro_Ramirez:   printf("Pedro_Ramirez"); break;
+        case Rose_Doolan:     printf("Rose_Doolan"); break;
+        case Sid_Ketchum:     printf("Sid_Ketchum"); break;
+        case Slab_the_Killer: printf("Slab_the_Killer"); break;
+        case Suzy_Lafayette:  printf("Suzy_Lafayette"); break;
+        case Vulture_Sam:     printf("Vulture_Sam"); break;
+        case Willy_the_Kid:   printf("Willy_the_Kid"); break;
+    }
+
+
+}
+
+
+//gear
+static void print_player_visual(int32_t x,int32_t y,Player *bot){
+
     print_frame(x,y,35,13);
 
     //name
@@ -121,9 +152,8 @@ static void print_player_visual(int32_t x,int32_t y,Player *bot)
     printf("%s",bot->user_name);
     
     //charater
-    gotoxy(x+2,y+2);
-    printf("charater");
-    
+    print_charater(x+2,y+2,bot);
+
     //bullets
     for(int i=0;i<(bot->bullets);i++)
     {
@@ -342,8 +372,9 @@ void print_board(List *game,Player *bot)
     {
         printf("=");
     }
+    print_charater(40,2,bot);
     gotoxy(2,2);
-    printf(" current player : %s  character : aaaaaaaaaaaaaaaaa",bot->user_name);
+    printf(" current player : %s",bot->user_name);
     gotoxy(143,2);
     printf("exit [_other_]");
     
@@ -449,6 +480,8 @@ void print_board(List *game,Player *bot)
     return;
 }
 
+// print           ||     
+//=================\/===
 void print_card(Card crd)
 {
     printf("Card: %s(%d,%d)\n",crd.name,crd.suit,crd.face);

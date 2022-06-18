@@ -16,6 +16,39 @@
 #define NULL_CARD 0
 #define BLUE_CARD 2
 
+#define JAIL     213
+#define DYNAMITE 214
+#define BARREL   215
+
+#define MUSTANG     216
+#define APPALOOSA   217
+
+#define SCHOFIELD   218
+#define VOLANIC     219
+#define REMINGTON   220
+#define CARABINE    221
+#define WINCHESTER  222
+
+#define Bart_Cassidy     401 //done
+#define Black_Jack       402 //done
+#define Calamity_Janet   403 //done
+#define El_Gringo        301 //done
+#define Jesse_Jones      405 //done
+#define Jourdonnais      406 //done
+#define Kit_Carlson      407 //done
+#define Lucky_Duke       408 //done
+#define Paul_Regret      302 //done
+#define Pedro_Ramirez    410 //not done yet
+#define Rose_Doolan      411 //done
+#define Sid_Ketchum      412 //done
+#define Slab_the_Killer  413 //done
+#define Suzy_Lafayette   414 //done
+#define Vulture_Sam      415 //done
+#define Willy_the_Kid    416 //done
+
+#define CHARACTER_NUM 16
+
+#define SIDE 0
 #define BANG 101
 #define BANG_NAME "Bang!"
 
@@ -158,6 +191,8 @@ typedef struct _sList
     Card discard_pile[PILE_NUM];
     
     Card *current_card;
+    Player *current_player;
     Player *next;
 }List;
+
 

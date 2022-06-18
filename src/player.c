@@ -2,7 +2,11 @@
 #include "player.h"
 #include "card.h"
 #include "list.h"
+#include "print.h"
 
+// distance        ||     
+//=================\/===
+// range == 0 means two sides
 static int32_t compare(int32_t a,int32_t b)
 {
     if(a > b) return b;
@@ -30,9 +34,19 @@ static int32_t get_distance(Player *bot1,Player *bot2)
     {
         distance++;
     }
+    
+    //======Paul_Regret=======
+    if(bot1->charater_ID == Paul_Regret)
+    {
+        distance++;
+    }
+    //========================
+
     return distance;
 }
 
+// select          ||     
+//=================\/===
 Player *select_other_player(List *game,Player *bot)
 {
     Player *current = bot;
@@ -40,6 +54,10 @@ Player *select_other_player(List *game,Player *bot)
     printf("please select a player:");
     int32_t sel = 0;
     scanf("%d",&sel);
+    
+    if(sel > game->players_num || sel <= 0){
+        return NULL;
+    }
     
     for(int i=0;i<sel;i++)
     {
@@ -49,8 +67,13 @@ Player *select_other_player(List *game,Player *bot)
 }
 
 Player *select_range_player(List *game,Player *bot,int32_t range)
-{   
+{
     Player *select = select_other_player(game,bot);
+    
+    if(select == NULL)
+    {
+        return NULL;
+    }
     
     if(range == SIDE)
     {
@@ -78,6 +101,8 @@ void get_card(Card *new_card,Player *bot)
     return;
 }
 
+// draw & get      ||     
+//=================\/===
 Card *draw(List *game)
 {
     int32_t ori_pos = game->pile_pos;
@@ -102,4 +127,81 @@ Card *discard_gear(List *game,Player *bot,int32_t gear_ID)
     
     return discard_card;
 }
+
+// discard         ||     
+//=================\/===
+
+int32_t get_temp_player_play(List *game,Player *bot)
+{
+    while(1)
+    {
+        print_board(game,bot);
+        int32_t sel=0;
+        printf("please discard:");
+        scanf("%d",&sel);
+        //0,7 page control
+        if(sel == 0)
+        {
+            if(game->card_page == 0)
+            {
+                printf("you can't do that");
+                continue;
+            }
+            game->card_page --;
+            continue;
+        }
+        if(sel == 7)
+        {
+            game->card_page ++;
+            if(game->card_page > 3)
+            {
+                game->card_page = 0;
+            }
+        }
+        if(sel < 7 && sel > 0)
+        {
+            if(sel+(game->card_page)*6-1 < bot->cards_num)
+            {
+                return sel+(game->card_page)*6-1;
+            }
+        }
+    }
+    return 0;
+}
+
+
+Card *select_discard(List *game,Player *bot)
+{
+    
+    int32_t discard_pos = get_temp_player_play(game,bot);
+    
+    Card *discard_card = &bot->hand_card[discard_pos];
+    
+    Card *current = &(bot->hand_card[discard_pos]);
+    game->discard_pile[game->discard_pos] = *current;
+    game->discard_pos++;
+    
+    for(int i=discard_pos;i<(bot->cards_num);i++)
+    {
+        bot->hand_card[i] = bot->hand_card[i+1];
+    }
+    
+    bot->cards_num--;
+    memset(&(bot->hand_card[bot->cards_num]),0,sizeof(Card));
+    
+    //======Suzy_Lafayette=====
+    if(bot->charater_ID == Suzy_Lafayette)
+    {
+        if(bot->cards_num == 0)
+        {
+            get_card(draw(game),bot);
+        }
+    }
+    //=========================
+    
+    return discard_card;
+}
+
+
+
 
