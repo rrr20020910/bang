@@ -1,4 +1,5 @@
 #include "utils/cstd.h"
+#include "utils/utils.h"
 #include "card.h"
 #include "player.h"
 #include "list.h"
@@ -6,24 +7,56 @@
 
 // play card       ||     
 //=================\/===
+static char *card_name(int32_t card_ID)
+{
+    char *name[CARD_TPYE] = {
+        BANG_NAME,
+        MISS_NAME,
+        BEER_NAME,
+        CAT_BLAUE_NAME,
+        PANIC_NAME,
+        DUEL_NAME,
+        GENERAL_STORE_NAME,
+        INDIANS_NAME,
+        GATLING_NAME,
+        SALON_NAME,
+        WELLS_FARGO_NAME,
+        STAGECOACH_NAME,
+        JAIL_NAME,
+        DYNAMITE_NAME,
+        BARREL_NAME,
+        MUSTANG_NAME,
+        APPALOOSA_NAME,
+        SCHOFIELD_NAME,
+        VOLANIC_NAME,
+        REMINGTON_NAME,
+        CARABINE_NAME,
+        WINCHESTER_NAME
+    };
+    return name[(card_ID%100)-1];
+} 
+
 static int32_t play_specify_card(List *game,Player *bot,int32_t card_id)
 {
+    INFO_MSG_PRINT("You need to play %s!!",card_name(card_id));
+    
     int32_t sel = get_temp_player_play(game,bot);
+
+    scanf("%d",&sel);
+    CHECK_UNTIL(LIMIT_OPTION_RANGE(sel),sel,"Please input valid move!!");
 
     //======Calamity_Janet=====
     if(bot->charater_ID == Calamity_Janet)
     {
-        if(card_id == 103)
+        if(card_id == BEER)
         {
             return 0;
         }
     }
-    //=========================
     else if(bot->hand_card[sel].card_ID != card_id)
     {
         return 0;
     }
-    
     
     Card *current = &(bot->hand_card[sel]);
     game->discard_pile[game->discard_pos] = *current;
@@ -96,10 +129,10 @@ int32_t gear_check(Player *bot,int32_t gear_ID)
 //=================\/===
 static void die(List *game,Player *bot)
 {
-    printf("%s Has been slain!!!\n",bot->user_name);
+    SYS_BAR_PRINT("%s has been slain!!",bot->user_name); //TODO: add charcter name
     if(bot == game->next)
     {
-        printf("sheriff DIE\n");
+        SYS_BAR_PRINT("Sheriff DIE!!\n"); //TODO: add gameover message
         if((game->players_num == 2) && (bot->next->role_ID == RENEGADE))
         {
             game->win_role = RENEGADE;
@@ -186,8 +219,8 @@ void damg(List *game,Player *bot)
         Player *current = bot->next;
         for(int i=0;i<((game->players_num)-1);i++)
         {
-            printf("%s is dying do you want ",bot->user_name);
-            if(play_specify_card(game,current,103))
+            INFO_MSG_PRINT("You are dying, but now you have a chance to alive yourself. On now, I have to tell you an important infomation.");
+            if(play_specify_card(game,current,BEER))
             {
                 heal(bot);
             }
@@ -239,7 +272,6 @@ static int32_t get_player_range(Player *bot)
     {
         range++;
     }
-
     return range;
 }
 
@@ -249,17 +281,18 @@ static int32_t Bang(List *game,Player *bot)
 {
     if(game->bang_play != 0)
     {
-        printf("you already play bang\n");
+        WARNING_MSG_PRINT("You can't not play bang anymore!!");
         return 1;
     }
     
     int32_t Miss_flag = 0;
 
-    printf("Bang! select a target\n");
+    INFO_MSG_PRINT("Bang! Please select a target: ");
     Player *target = select_range_player(game,bot,get_player_range(bot));
     if(target == NULL)
     {
-        printf("It's too far\n");
+        INFO_MSG_PRINT("No, It's too far!! Your distance is not enough to Bang target!!");
+        usleep(2000000);
         return 1;
     }
     
@@ -270,13 +303,13 @@ static int32_t Bang(List *game,Player *bot)
             Miss_flag++;
         }
         //========================
-        printf("Miss! use BARREL\n");
+        SYS_BAR_PRINT("%s Miss! because of the BARREL!! It's too lucky!!",target->user_name);
         Miss_flag++;
     }
     
     //=======Jourdonnais=======
     if(bot->charater_ID == Jourdonnais){
-        printf("Miss! use BARREL\n");
+        SYS_BAR_PRINT("%s Miss! because of the BARREL!! It's too lucky!!",target->user_name);
         Miss_flag++;
     }
     //========================
@@ -350,7 +383,7 @@ static int32_t Miss(List *game,Player *bot)
         return 0;
     }
     //========================
-    printf("you can't Player miss\n");
+    WARNING_MSG_PRINT("You can't Player miss\n");
     return 1;
 }
 
@@ -368,7 +401,7 @@ static int32_t Panic(List *game,Player *bot)
     Player *target = select_range_player(game,bot,SIDE);
     if(target == NULL)
     {
-        printf("It's too far\n");
+        WARNING_MSG_PRINT("It's too far\n");
         return 1;
     }
     get_card(discard_random(game,target),bot);
@@ -578,28 +611,28 @@ static int32_t Horse(List *game,Player *bot)
 void build_pile(List *game)
 {    
     Card pile[CARD_TPYE] = {
-        {"Bang!"         ,101,&Bang},
-        {"Miss"          ,102,&Miss},
-        {"Beer"          ,103,&Beer},
-        {"Cat_Balou"     ,104,&Cat_Balou},
-        {"Panic"         ,105,&Panic},
-        {"Duel"          ,106,&Duel},
-        {"General_Store" ,107,&General_Store},
-        {"Indians"       ,108,&Indians},
-        {"Gatling"       ,109,&Gatling},
-        {"Salon"         ,110,&Salon},
-        {"Wells_Fargo"   ,111,&Wells_Fargo},
-        {"Stagecoach"    ,112,&Stagecoach},
-        {"Jail"          ,213,&Jail},
-        {"Dynamite"      ,214,&Dynamite},
-        {"Barrel"        ,215,&Barrel},
-        {"Mustang"       ,216,&Horse},
-        {"Appaloosa"     ,217,&Horse},
-        {"Schofield"     ,218,&Gun},
-        {"Volanic"       ,219,&Gun},
-        {"Remington"     ,220,&Gun},
-        {"Rev.carabine"  ,221,&Gun},
-        {"Winchester"    ,222,&Gun}
+        {BANG_NAME          ,BANG           ,&Bang},
+        {MISS_NAME          ,MISS           ,&Miss},
+        {BEER_NAME          ,BEER           ,&Beer},
+        {CAT_BLAUE_NAME     ,CAT_BLAUE      ,&Cat_Balou},
+        {PANIC_NAME         ,PANIC          ,&Panic},
+        {DUEL_NAME          ,DUEL           ,&Duel},
+        {GENERAL_STORE_NAME ,GENERAL_STORE  ,&General_Store},
+        {INDIANS_NAME       ,INDIANS        ,&Indians},
+        {GATLING_NAME       ,GATLING        ,&Gatling},
+        {SALON_NAME         ,SALON          ,&Salon},
+        {WELLS_FARGO_NAME   ,WELLS_FARGO    ,&Wells_Fargo},
+        {STAGECOACH_NAME    ,STAGECOACH     ,&Stagecoach},
+        {JAIL_NAME          ,JAIL           ,&Jail},
+        {DYNAMITE_NAME      ,DYNAMITE       ,&Dynamite},
+        {BARREL_NAME        ,BARREL         ,&Barrel},
+        {MUSTANG_NAME       ,MUSTANG        ,&Horse},
+        {APPALOOSA_NAME     ,APPALOOSA      ,&Horse},
+        {SCHOFIELD_NAME     ,SCHOFIELD      ,&Gun},
+        {VOLANIC_NAME       ,VOLANIC        ,&Gun},
+        {REMINGTON_NAME     ,RENEGADE       ,&Gun},
+        {CARABINE_NAME      ,CARABINE       ,&Gun},
+        {WINCHESTER_NAME    ,WINCHESTER     ,&Gun}
     };
                     
     int32_t every_card_num[CARD_TPYE] = {25,12,6,4,4,3,2,2,1,1,1,2,2,1,3,2,1,3,2,1,1,1};

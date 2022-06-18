@@ -17,6 +17,27 @@ int main()
     
     Player bot[player_num];
     
+    //get_role
+    int32_t role_list[8] = {
+        SHERIFF,
+        RENEGADE,
+        OUTLAW,
+        OUTLAW,
+        DEPUTY_SHERIFF,
+        OUTLAW,
+        DEPUTY_SHERIFF,
+        RENEGADE
+    };
+                      
+    srand(time(NULL));
+    for(int i=0;i<player_num;i++)
+    {
+        int32_t rand_pos = rand()%player_num;
+        int32_t temp = role_list[i];
+        role_list[i] = role_list[rand_pos];
+        role_list[rand_pos] = temp;
+    }
+    
     //player_info
     for(int i=0;i<player_num;i++)
     {

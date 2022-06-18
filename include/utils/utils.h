@@ -10,6 +10,15 @@
     } \
 })
 
+#define CHECK_UNTIL(condition, var, format, args...) ({ \
+    while (1) { \
+        scanf("%d",&var); \
+        fflush(stdin); \
+        if (!(condition)) printf(format"\n", ##args);\
+        else break; \
+    } \
+})
+
 #include "fileio.h" //CHECK_VALID in there, put here after CHECK_VALID
 
 //  ANSI Set Graphics Mode

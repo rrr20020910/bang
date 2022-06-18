@@ -39,6 +39,5 @@ void build_list(List *game,Player bot){
     }
     current->next = new;
     new->next = sheriff;
-
     return;
 }
