@@ -3,6 +3,7 @@
 #include "card.h"
 #include "list.h"
 #include "player.h"
+#include "print.h"
 
 // available move  ||     
 //=================\/===
@@ -25,7 +26,7 @@ int32_t play_card(List *game,Player *bot,int32_t sel)
     
     if((bot->hand_card[sel].card_ID)/100 == 1)
     {
-    
+        SYS_BAR_PRINT("%s play %s",bot->user_name,game->current_card->name);
         game->discard_pile[game->discard_pos] = *game->current_card;
         game->discard_pos++;
     }

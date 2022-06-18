@@ -11,12 +11,22 @@
 #define CARD_LENGTH  12
 #define CARD_IMG_FILEPATH "./assets/card-image"
 
+// TODO: system msgm
+// somebody play card 
+// somebody die
+// dynamte msg
+// jail msg
+// barrel msg
+// some charater trigger ability
+// somebody draw card
+// somebody discard card
+
 static void gotoxy(int32_t x,int32_t y)
 {
     printf("%c[%d;%df",0x1B,y,x);
 }
 
-//must print frist
+// must print frist
 static void print_frame(int32_t x,int32_t y,int32_t w,int32_t h)
 {
     //print head
@@ -48,9 +58,9 @@ static void print_frame(int32_t x,int32_t y,int32_t w,int32_t h)
     return;
 }
 
-//role 
-static void print_role(int32_t x,int32_t y,Player *bot){
-    
+// role 
+static void print_role(int32_t x,int32_t y,Player *bot)
+{
     if(bot->role_ID == SHERIFF)
     {
         gotoxy(x,y);
@@ -101,7 +111,7 @@ static void print_role(int32_t x,int32_t y,Player *bot){
     }
 }
 
-//gear
+// gear
 static void print_player_visual(int32_t x,int32_t y,Player *bot){
 
     print_frame(x,y,35,13);
@@ -288,12 +298,35 @@ static void print_next_turn(int32_t x,int32_t y)
     printf("/  End_turn [_9_] ");
 }
 
-static void print_text(int32_t x,int32_t y)
+void print_system_msg(int32_t mode,char* str) //mode=0 : read to sys_log, otherwise : print system info
 {
-    for(int i=0;i<15;i++)
+    int32_t x = 81,y = 23;
+    static char **sys_log = NULL;
+    if(sys_log == NULL)
     {
-        gotoxy(x,y+i);
-        printf("%2d] abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz",i+1);
+        sys_log = (char**)calloc(SYS_BAR_ROW,sizeof(char**));
+        for(int i=0;i<SYS_BAR_ROW;i++)
+        {
+            sys_log[i] = (char*)calloc(SYS_MSG_LENGTH,sizeof(char*));
+        }
+    }
+    
+    if(mode==0)
+    {
+        for(int i=SYS_BAR_ROW-1;i>0 ;i--)
+        {
+            strncpy(sys_log[i],sys_log[i-1],strlen(sys_log[i-1]));
+        }
+        strncpy(sys_log[0],str,strlen(str));
+      
+    }
+    else
+    {
+        for(int i=0;i<SYS_BAR_ROW;i++)
+        {
+            gotoxy(x,y+i);
+            printf("%2d] %s\n",i+1,sys_log[i]);
+        }
     }
     return;
 }
@@ -405,7 +438,7 @@ void print_board(List *game,Player *bot)
     print_next_page(112,43);
     print_prev_page(2,43);
     print_next_turn(52,37);
-    print_text(81,23);
+    print_system_msg(1,"");
     
     //page
     gotoxy(107,39);
@@ -415,8 +448,6 @@ void print_board(List *game,Player *bot)
     return;
 }
 
-// print           ||     
-//=================\/===
 void print_card(Card crd)
 {
     printf("Card: %s(%d,%d)\n",crd.name,crd.suit,crd.face);

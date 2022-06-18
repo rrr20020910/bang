@@ -16,8 +16,8 @@ void free_list(List *game)
     return;
 }
 
-void build_list(List *game,Player bot){
-    
+void build_list(List *game,Player bot)
+{    
     Player *new;
     new = (Player*)malloc(sizeof(Player));
     
@@ -39,6 +39,5 @@ void build_list(List *game,Player bot){
     }
     current->next = new;
     new->next = sheriff;
-
     return;
 }

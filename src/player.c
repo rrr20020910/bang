@@ -3,9 +3,6 @@
 #include "card.h"
 #include "list.h"
 
-// distance        ||     
-//=================\/===
-// range == 0 means two sides
 static int32_t compare(int32_t a,int32_t b)
 {
     if(a > b) return b;
@@ -36,8 +33,6 @@ static int32_t get_distance(Player *bot1,Player *bot2)
     return distance;
 }
 
-// select          ||     
-//=================\/===
 Player *select_other_player(List *game,Player *bot)
 {
     Player *current = bot;
@@ -83,8 +78,6 @@ void get_card(Card *new_card,Player *bot)
     return;
 }
 
-// draw & get      ||     
-//=================\/===
 Card *draw(List *game)
 {
     int32_t ori_pos = game->pile_pos;
@@ -109,3 +102,4 @@ Card *discard_gear(List *game,Player *bot,int32_t gear_ID)
     
     return discard_card;
 }
+
