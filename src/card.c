@@ -147,6 +147,14 @@ static void die(List *game,Player *bot)
         game->win_role = OUTLAW;
         return;
     }
+
+    if(bot->role_ID == OUTLAW)
+    {
+        SYS_BAR_PRINT("%s get three cards because outlaw has been slained ",game->current_player->user_name);
+        get_card(draw(game),game->current_player); 
+        get_card(draw(game),game->current_player); 
+        get_card(draw(game),game->current_player); 
+    }
     
     //======Vulture_Sam=====
     Player *current = bot;

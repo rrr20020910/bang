@@ -224,14 +224,14 @@ static void print_player_visual(int32_t x,int32_t y,List *game,Player *bot){
     }
     
     //role
-    print_role(x+11,y+4,bot);
-    /*
-    int32_t r_x = x+9,r_y = y+4;
+    // print_role(x+11,y+4,bot);
+    
+    int32_t r_x = x+11,r_y = y+4;
     for(int i=0;i<4;i++)
     {
         gotoxy(r_x,r_y+i);
         printf("[========]");
-    }*/
+    }
     
     //avata
     int32_t a_x = x,a_y = y-3;
