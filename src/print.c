@@ -329,7 +329,8 @@ static void print_next_turn(int32_t x,int32_t y)
     printf("/  End_turn [_9_] ");
 }
 
-void print_system_msg(int32_t mode,char* str) //mode=0 : read to sys_log, otherwise : print system info
+// mode=0 : read to sys_log, otherwise : print system info
+void print_system_msg(int32_t mode,char* str)
 {
     int32_t x = 81,y = 23;
     static char **sys_log = NULL;
@@ -349,7 +350,6 @@ void print_system_msg(int32_t mode,char* str) //mode=0 : read to sys_log, otherw
             strncpy(sys_log[i],sys_log[i-1],strlen(sys_log[i-1]));
         }
         strncpy(sys_log[0],str,strlen(str));
-      
     }
     else
     {
