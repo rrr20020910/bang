@@ -40,7 +40,12 @@ static int32_t play_specify_card(List *game,Player *bot,int32_t card_id)
     INFO_MSG_PRINT("You need to play %s!!",card_name(card_id));
     
     int32_t sel = get_temp_player_play(game,bot);
-
+    
+    if(sel == 9)
+    {
+        return 0;
+    }
+    
     //======Calamity_Janet=====
     if(bot->charater_ID == Calamity_Janet)
     {
@@ -219,19 +224,26 @@ void damg(List *game,Player *bot)
 
     if(bot->bullets <= 0)
     {
-        Player *current = bot->next;
-        for(int i=0;i<((game->players_num)-1);i++)
+        INFO_MSG_PRINT("you are dying, you can play beer to your live.");
+        if(play_specify_card(game,bot,BEER))
         {
-            INFO_MSG_PRINT("%s are dying, you can play beer to save his live.",bot->user_name);
-            if(play_specify_card(game,current,BEER))
+            heal(bot);
+        }
+        if(bot->bullets <= 0){
+            Player *current = bot->next;
+            for(int i=0;i<(game->players_num-1);i++)
             {
-                heal(bot);
-                if(bot->bullets > 0)
+                INFO_MSG_PRINT("%s are dying, you can play beer to save his live.",bot->user_name);
+                if(play_specify_card(game,current,BEER))
                 {
-                    break;
+                    heal(bot);
+                    if(bot->bullets > 0)
+                    {
+                        break;
+                    }
                 }
+                current=current->next;
             }
-            current=current->next;
         }
     }
     if(bot->bullets <= 0)
@@ -443,7 +455,7 @@ static int32_t General_Store(List *game,Player *bot)
         print_store(1,1,112,14);
         for(int i=0;i<6;i++)
         {
-            if(i < game->players_num)
+            if(i < game->players_num-i)
             {
                 print_card_visual(5+i*17,2,*store[i]);
                 gotoxy(7+i*17,13);
@@ -584,6 +596,12 @@ static int32_t Jail(List *game,Player *bot)
 {
     printf("Jail select a target\n");
     Player *target = select_other_player(game,bot);
+    
+    if(target->role_ID == SHERIFF)
+    {
+        WARNING_MSG_PRINT("You can't lock SHERIFF in Jail\n");
+        return 1;
+    }
     
     if(target == NULL){
         WARNING_MSG_PRINT("choose right target\n");

@@ -140,7 +140,7 @@ int32_t get_temp_player_play(List *game,Player *bot)
         print_board(game,bot);
         INFO_MSG_PRINT("Please select to discard:");
         int32_t sel=0;
-        CHECK_UNTIL(sel>=1&&sel<=7,sel,"Please input valid move!!");
+        CHECK_UNTIL((sel>=1 && sel<=7) || sel==9,sel,"Please input valid move!!");
         
         //0,7 page control
         if(sel == 0)
@@ -166,6 +166,10 @@ int32_t get_temp_player_play(List *game,Player *bot)
             {
                 return (sel+(game->card_page)*6-1);
             }
+        }
+        if(sel == 9)
+        {
+            return 0;
         }
     }
     return 0;
