@@ -53,7 +53,7 @@ int32_t play_card(List *game,Player *bot,int32_t sel)
 int32_t get_player_move(List *game,Player *bot)
 {
     //get select
-    printf("please select a move:");
+    printf("Please select a move:");
     int32_t sel=0;
     CHECK_UNTIL(sel >= 1 && sel <= 9,sel,"You have to choose an action");
     
@@ -68,7 +68,7 @@ int32_t get_player_move(List *game,Player *bot)
     {
         if(game->card_page == 0)
         {
-            printf("you can't do that");
+            printf("you can't do that!");
             return 0;
         }
         game->card_page --;
@@ -88,7 +88,7 @@ int32_t get_player_move(List *game,Player *bot)
     {
         if(sel == 8)
         {
-            SYS_BAR_PRINT("%s use Sid_Ketchum restore one bullets",bot->user_name);
+            SYS_BAR_PRINT("%s use Sid_Ketchum's skill to restore one bullet.",bot->user_name);
             select_discard(game,bot);
             select_discard(game,bot);
             heal(bot);
@@ -200,7 +200,7 @@ void draw_stage(List *game,Player *bot)
         int check = 0;
         //======Lucky_Duke=====
         if(bot->charater_ID == Lucky_Duke){
-            SYS_BAR_PRINT("%s use Lucky_Duke double check",bot->user_name);
+            SYS_BAR_PRINT("%s use Lucky_Duke's great luck!",bot->user_name);
             check++;
         }
         //========================
@@ -223,7 +223,7 @@ void draw_stage(List *game,Player *bot)
         
         //======Lucky_Duke=====
         if(bot->charater_ID == Lucky_Duke){
-            SYS_BAR_PRINT("%s use Lucky_Duke double check",bot->user_name);
+            SYS_BAR_PRINT("%s use Lucky_Duke's great luck!'",bot->user_name);
             check++;
         }
         //========================
@@ -237,7 +237,7 @@ void draw_stage(List *game,Player *bot)
 
     //======Pedro_Ramirez=====
     if(bot->charater_ID == Pedro_Ramirez){
-        printf("You are Pedro_Ramirez do you want to draw from discard pile [_8_]");
+        printf("You are Pedro_Ramirez, do you want to draw from discard pile?[_8_]");
         
         int32_t sel = 0;
         CHECK_UNTIL(sel==8,sel,"No next time!");
@@ -245,7 +245,7 @@ void draw_stage(List *game,Player *bot)
             get_card(&game->discard_pile[game->discard_pos-1],bot);
             memset(&game->discard_pile[game->discard_pos-1],0,sizeof(Card));
             game->discard_pos--;
-            SYS_BAR_PRINT("%s use Pedro_Ramirez draw from discard pile",bot->user_name);
+            SYS_BAR_PRINT("%s use Pedro_Ramirez's skill to draw from discard pile.",bot->user_name);
             get_card(draw(game),bot);
             return;
         }
@@ -261,7 +261,7 @@ void draw_stage(List *game,Player *bot)
     
     //======Jesse_Jones=====
     if(bot->charater_ID == Jesse_Jones){
-        printf("You are Jesse_Jones do you want to draw from other player [_8_]");
+        printf("You are Jesse_Jones, do you want to draw from other player?[_8_]");
         int32_t sel = 0;
         CHECK_UNTIL(sel==8,sel,"No next time!");
         if(sel == 8){
@@ -286,10 +286,10 @@ void draw_stage(List *game,Player *bot)
         get_card(draw(game),bot);
         Card *check = draw(game);
         
-        SYS_BAR_PRINT("%s use Black_Jack second card is %s",bot->user_name,card_name(check->card_ID));
+        SYS_BAR_PRINT("The Black_Jack's second card is %s",card_name(check->card_ID));
         get_card(check,bot);
         
-        SYS_BAR_PRINT("%s use Black_Jack can draw another card",bot->user_name);
+        SYS_BAR_PRINT("%s use Black_Jack's skill and  he can draw another card!",bot->user_name);
         
         get_card(draw(game),bot);
         return;
@@ -298,7 +298,7 @@ void draw_stage(List *game,Player *bot)
     
     //======Kit_Carlson=====
     if(bot->charater_ID == Kit_Carlson){
-        SYS_BAR_PRINT("%s use Kit_Carlson draw three cards and discard one",bot->user_name);
+        SYS_BAR_PRINT("%s use Kit_Carlson's skill to draw three cards and discard one!",bot->user_name);
         get_card(draw(game),bot);
         get_card(draw(game),bot);
         get_card(draw(game),bot);
