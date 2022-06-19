@@ -170,12 +170,12 @@ void menu_game_settings(List *game,char ***player_name)
         (*player_name)[i] = (char*)calloc(MAX_NAME_LEN,sizeof(char*));
         while(1)
         {
-            printf("Please enter the player%d's name: ",i+1);
+            printf("Please enter the player%d's name (max 10 char): ",i+1);
             scanf("%s",str_tmp);
             fflush(stdin);
             if(strlen(str_tmp) > 10)
             {
-                printf("Your name is too long!\n");
+                printf("Your name is too long! (max 10 char) \n");
                 continue;    
             }
             //printf("%s\n",str_tmp);

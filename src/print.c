@@ -490,7 +490,7 @@ void print_board(List *game,Player *bot)
     gotoxy(2,2);
     printf(" current player : %s",bot->user_name);
     gotoxy(143,2);
-    printf("exit [_other_]");
+    printf("exit [Ctrl+C]");
     
     //middle card
     Card Null_card;

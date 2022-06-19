@@ -133,7 +133,7 @@ static void die(List *game,Player *bot)
     SYS_BAR_PRINT("\033[1;31m%s has been slain!!\033[0m",bot->user_name);
     if(bot == game->next)
     {
-        SYS_BAR_PRINT("Sheriff DIE!!\n");
+        SYS_BAR_PRINT("\033[1;31mSheriff DIE!!\033[0m");
         if((game->players_num == 2) && (bot->next->role_ID == RENEGADE))
         {
             game->win_role = RENEGADE;
@@ -222,14 +222,14 @@ void damg(List *game,Player *bot)
         Player *current = bot->next;
         for(int i=0;i<((game->players_num)-1);i++)
         {
-            INFO_MSG_PRINT("You are dying, but now you have a chance to alive yourself. On now, I have to tell you an important infomation.");
+            INFO_MSG_PRINT("%s are dying, you can play beer to save his live.",bot->user_name);
             if(play_specify_card(game,current,BEER))
             {
                 heal(bot);
-            }
-            if(bot->bullets > 0)
-            {
-                break;
+                if(bot->bullets > 0)
+                {
+                    break;
+                }
             }
             current=current->next;
         }
@@ -368,7 +368,7 @@ static int32_t Wells_Fargo(List *game,Player *bot)
 
 static int32_t Stagecoach(List *game,Player *bot)
 {
-    SYS_BAR_PRINT("%s play Wells_Fargo draw two cards",bot->user_name);
+    SYS_BAR_PRINT("%s play Stagecoach draw two cards",bot->user_name);
     get_card(draw(game),bot);
     get_card(draw(game),bot);
     return 0;
@@ -459,7 +459,7 @@ static int32_t General_Store(List *game,Player *bot)
         gotoxy(2,16);
         printf("please select a card(General_Store) %s: ",current->user_name);
         int32_t sel = 0;
-        scanf("%d",&sel);
+        CHECK_UNTIL(sel>=1&&sel<=game->players_num-i,sel,"please select a valid card");
         sel--;
         get_card(store[sel],current);
         
@@ -471,6 +471,7 @@ static int32_t General_Store(List *game,Player *bot)
         }
         current=current->next;
     }
+    SYS_BAR_PRINT("%s get a card from General_Store",current->user_name);
     get_card(store[0],current);
     return 0;
 }
@@ -559,7 +560,7 @@ static int32_t Cat_Balou(List *game,Player *bot)
     }
     printf("Please enter selection :");
     int32_t sel = 0;
-    scanf("%d",&sel);
+    CHECK_UNTIL(sel>=1&&sel<=7,sel,"please select a valid player");
     
     if(sel == 1)
     {
