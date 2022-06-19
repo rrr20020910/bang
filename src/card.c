@@ -42,8 +42,7 @@ static int32_t play_specify_card(List *game,Player *bot,int32_t card_id)
     
     int32_t sel = get_temp_player_play(game,bot);
 
-    scanf("%d",&sel);
-    CHECK_UNTIL(LIMIT_OPTION_RANGE(sel),sel,"Please input valid move!!");
+    CHECK_UNTIL(sel>=0&&sel<=7,sel,"You can't do that!!\n Please input valid move!!");
 
     //======Calamity_Janet=====
     if(bot->charater_ID == Calamity_Janet)
