@@ -13,16 +13,12 @@ int main()
     game.next = NULL;
     
     build_pile(&game);
-<<<<<<< HEAD
     
 
     char **player_name = NULL;
     start_of_the_game(&game,&player_name);
     
     Player bot[game.players_num];
-=======
-    Player bot[player_num];
->>>>>>> 831eb7ec679b72bfcccd04c91bf40d8c0df90ce3
     
     //get_role
     int32_t role_list[8] = {
