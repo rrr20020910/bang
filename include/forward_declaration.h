@@ -145,13 +145,11 @@
 })
 
 #define CHECK_UNTIL(condition, var, format, args...) ({ \
-    while (1) { \
-        scanf("%d",&var); \
-        fflush(stdin); \
-        if (!(condition)) printf(format"\n", ##args);\
-        else break; \
-    } \
+    scanf("%d",&var); \
+    fflush(stdin); \
+    if (!(condition)) {printf(format"\nENTER TO CONTINUE......", ##args); fgetc(stdin); fflush(stdin);}\
 })
+
 
 typedef struct _sCard Card;
 typedef struct _sPlayer Player;
