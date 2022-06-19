@@ -340,7 +340,18 @@ void discard_stage(List *game,Player *bot)
 
 void win_message(List game)
 {
-    printf("%d win",game.win_role);
+    if(game.win_role == SHERIFF)
+    {
+        puts("YAAAAAAAAA \n SHERIFF AND DEPUTY SHERIFF WIN!!!!!!!!!!!\n OUTLAWS AND RENEGADE are dead!!!!");
+    }
+    else if(game.win_role == OUTLAW)
+    {
+        puts("AAAAAAAAAA \n OUTLAWS WINS!!!!!!!!!!!\n OTHERS are dead!!!!");
+    }
+    else if(game.win_role == RENEGADE)
+    {
+        puts("WOWOWOWOWO \n RENEGADE WINS!!!!!!!!!!!\n OTHERS are dead!!!!");
+    }
     return;
 }
 
