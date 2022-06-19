@@ -26,7 +26,6 @@ int32_t play_card(List *game,Player *bot,int32_t sel)
 
     if((bot->hand_card[sel].card_ID)/100 == 1)
     {
-        SYS_BAR_PRINT("%s play %s",bot->user_name,game->current_card->name);
         game->discard_pile[game->discard_pos] = *game->current_card;
         game->discard_pos++;
     }
@@ -56,7 +55,7 @@ int32_t get_player_move(List *game,Player *bot)
     //get select
     printf("please select a move:");
     int32_t sel=0;
-    scanf("%d",&sel);
+    CHECK_UNTIL(sel >= 1 && sel <= 9,sel,"You have to choose an action");
     
     //1~6 play card
     if((sel >= 1) && (sel <= 6))
@@ -89,6 +88,7 @@ int32_t get_player_move(List *game,Player *bot)
     {
         if(sel == 8)
         {
+            SYS_BAR_PRINT("%s use Sid_Ketchum restore one bullets",bot->user_name);
             select_discard(game,bot);
             select_discard(game,bot);
             heal(bot);
@@ -212,6 +212,7 @@ void draw_stage(List *game,Player *bot)
         int check = 0;
         //======Lucky_Duke=====
         if(bot->charater_ID == Lucky_Duke){
+            SYS_BAR_PRINT("%s use Lucky_Duke double check",bot->user_name);
             check++;
         }
         //========================
@@ -234,6 +235,7 @@ void draw_stage(List *game,Player *bot)
         
         //======Lucky_Duke=====
         if(bot->charater_ID == Lucky_Duke){
+            SYS_BAR_PRINT("%s use Lucky_Duke double check",bot->user_name);
             check++;
         }
         //========================
@@ -247,26 +249,60 @@ void draw_stage(List *game,Player *bot)
 
     //======Pedro_Ramirez=====
     if(bot->charater_ID == Pedro_Ramirez){
-        get_card(draw(game),bot);
-        get_card(draw(game),bot);
-        return;
+        printf("You are Pedro_Ramirez do you want to draw from discard pile [_8_]");
+        
+        int32_t sel = 0;
+        CHECK_UNTIL(sel==8,sel,"No next time!");
+        if(sel == 8){
+            get_card(&game->discard_pile[game->discard_pos-1],bot);
+            memset(&game->discard_pile[game->discard_pos-1],0,sizeof(Card));
+            game->discard_pos--;
+            SYS_BAR_PRINT("%s use Pedro_Ramirez draw from discard pile",bot->user_name);
+            get_card(draw(game),bot);
+            return;
+        }
+        else{
+            get_card(draw(game),bot);
+            get_card(draw(game),bot);
+            return;
+        }
+        
+
     }
     //========================
     
     //======Jesse_Jones=====
     if(bot->charater_ID == Jesse_Jones){
-        Player *target = select_other_player(game,bot);
-        get_card(discard_random(game,target),bot);
-        get_card(draw(game),bot);
+        printf("You are Jesse_Jones do you want to draw from other player [_8_]");
+        int32_t sel = 0;
+        CHECK_UNTIL(sel==8,sel,"No next time!");
+        if(sel == 8){
+            Player *target = select_other_player(game,bot);
+            get_card(discard_random(game,target),bot);
+            get_card(draw(game),bot);
+            return;
+        }
+        else{
+            get_card(draw(game),bot);
+            get_card(draw(game),bot);
+            return;
+        }
+        
         return;
     }
     //========================
     
     //======Black_Jack=====
     if(bot->charater_ID == Black_Jack){
+
         get_card(draw(game),bot);
         Card *check = draw(game);
+        
+        SYS_BAR_PRINT("%s use Black_Jack second card is %s",bot->user_name,card_name(check->card_ID));
         get_card(check,bot);
+        
+        SYS_BAR_PRINT("%s use Black_Jack can draw another card",bot->user_name);
+        
         get_card(draw(game),bot);
         return;
     }
@@ -274,6 +310,7 @@ void draw_stage(List *game,Player *bot)
     
     //======Kit_Carlson=====
     if(bot->charater_ID == Kit_Carlson){
+        SYS_BAR_PRINT("%s use Kit_Carlson draw three cards and discard one",bot->user_name);
         get_card(draw(game),bot);
         get_card(draw(game),bot);
         get_card(draw(game),bot);
@@ -295,7 +332,7 @@ void discard_stage(List *game,Player *bot)
     {
         select_discard(game,bot);
     }
-
+    SYS_BAR_PRINT("\033[1;34m%s end his turn \033[0m",bot->user_name);
     game->bang_play = 0;
     game->isInJail = 0;
     game->gear_change = 0;
