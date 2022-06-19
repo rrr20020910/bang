@@ -136,7 +136,9 @@ int32_t get_temp_player_play(List *game,Player *bot)
 {
     while(1)
     {
+        
         print_board(game,bot);
+        INFO_MSG_PRINT("Please select to discard:");
         int32_t sel=0;
         CHECK_UNTIL(sel>=1&&sel<=7,sel,"Please input valid move!!");
         
@@ -172,7 +174,6 @@ int32_t get_temp_player_play(List *game,Player *bot)
 
 Card *select_discard(List *game,Player *bot)
 {
-    INFO_MSG_PRINT("Please select a to discard:");
     int32_t discard_pos = get_temp_player_play(game,bot);
     
     Card *discard_card = &bot->hand_card[discard_pos];
