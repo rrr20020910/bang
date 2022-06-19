@@ -16,7 +16,6 @@ int main()
     game.players_num = player_num;
     
     build_pile(&game);
-    
     Player bot[player_num];
     
     //get_role
@@ -84,9 +83,7 @@ int main()
         current = current->next;
         game.current_player = current;
     }
-    
     win_message(game);
-    
     free_list(&game);
     return 0;
 }
