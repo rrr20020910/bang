@@ -1,5 +1,4 @@
 #include "utils/cstd.h"
-#include "utils/utils.h"
 #include "card.h"
 #include "player.h"
 #include "list.h"
@@ -42,8 +41,6 @@ static int32_t play_specify_card(List *game,Player *bot,int32_t card_id)
     
     int32_t sel = get_temp_player_play(game,bot);
 
-    CHECK_UNTIL(sel>=0&&sel<=7,sel,"You can't do that!!\n Please input valid move!!");
-
     //======Calamity_Janet=====
     if(bot->charater_ID == Calamity_Janet)
     {
@@ -52,11 +49,12 @@ static int32_t play_specify_card(List *game,Player *bot,int32_t card_id)
             return 0;
         }
     }
+    //===============================
     else if(bot->hand_card[sel].card_ID != card_id)
     {
         return 0;
     }
-    
+
     Card *current = &(bot->hand_card[sel]);
     game->discard_pile[game->discard_pos] = *current;
     game->discard_pos++;
@@ -301,7 +299,7 @@ static int32_t Bang(List *game,Player *bot)
         if(bot->charater_ID == Lucky_Duke){
             Miss_flag++;
         }
-        //========================
+        //=======================
         SYS_BAR_PRINT("%s Miss! because of the BARREL!! It's too lucky!!",target->user_name);
         Miss_flag++;
     }
@@ -416,12 +414,23 @@ static int32_t General_Store(List *game,Player *bot)
     Player *current = bot;
     for(int i=0;i<(game->players_num)-1;i++)
     {
-        //List card
-        for(int j=0;j<(game->players_num)-i;j++)
+        print_store(1,1,112,14);
+        for(int i=0;i<6;i++)
         {
-            printf("%d) ",j+1);
-            print_card(*store[j]);
+            if(i < game->players_num)
+            {
+                print_card_visual(5+i*17,2,*store[i]);
+                gotoxy(7+i*17,13);
+                printf("[_%d_]",i+1);
+            }
+            else
+            {
+                Card Null_card;
+                memset(&Null_card,0,sizeof(Card));
+                print_card_visual(5+i*17,2,Null_card);
+            }
         }
+        gotoxy(2,16);
         printf("please select a card(General_Store): ");
         int32_t sel = 0;
         scanf("%d",&sel);
@@ -563,7 +572,14 @@ static int32_t Barrel(List *game,Player *bot)
 {    
     if(gear_check(bot,BARREL))
     {
+        if(game->gear_change == BARREL){
+            discard_gear(game,bot,BARREL);
+            bot->gear[bot->gear_num] = *game->current_card;
+            bot->gear_num ++;
+            return 0;
+        }
         printf("you already have BARREL");
+        game->gear_change = BARREL;
         return 1;
     }
     bot->gear[bot->gear_num] = *game->current_card;
@@ -578,9 +594,18 @@ static int32_t Gun(List *game,Player *bot)
     {
         if(gear_check(bot,i))
         {
+            if(game->gear_change == i)
+            {
+                discard_gear(game,bot,i);
+                bot->gear[bot->gear_num] = *game->current_card;
+                bot->gear_num ++;
+                return 0;
+            }
             printf("you already have BARREL");
+            game->gear_change = i;
             return 1;
         }
+        
     }
     bot->gear[bot->gear_num] = *game->current_card;
     bot->gear_num ++;
@@ -589,15 +614,22 @@ static int32_t Gun(List *game,Player *bot)
 
 static int32_t Horse(List *game,Player *bot)
 {
-    if(gear_check(bot,MUSTANG))
+    for(int i=MUSTANG ;i <= APPALOOSA;i++)
     {
-        printf("you already have BARREL");
-        return 1;
-    }
-    if(gear_check(bot,APPALOOSA))
-    {
-        printf("you already have BARREL");
-        return 1;
+        if(gear_check(bot,i))
+        {
+            if(game->gear_change == i)
+            {
+                discard_gear(game,bot,i);
+                bot->gear[bot->gear_num] = *game->current_card;
+                bot->gear_num ++;
+                return 0;
+            }
+            printf("you already have BARREL");
+            game->gear_change = i;
+            return 1;
+        }
+        
     }
     bot->gear[bot->gear_num] = *game->current_card;
     bot->gear_num ++;

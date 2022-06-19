@@ -15,9 +15,48 @@
 // somebody draw card
 // somebody discard card
 
-static void gotoxy(int32_t x,int32_t y)
+void gotoxy(int32_t x,int32_t y)
 {
     printf("%c[%d;%df",0x1B,y,x);
+}
+
+void print_store(int32_t x,int32_t y,int32_t w,int32_t h)
+{
+    //print head
+    system("clear");
+    gotoxy(x,y);
+    printf("#");
+    for(int i=0;i<(w-2);i++)
+    {
+        printf("-");
+    }
+    printf("#");
+
+    //print body
+    for(int i=0;i<(h-2);i++)
+    {
+        if(i%2==0){
+            gotoxy(x,y+i+1);
+            printf("[");
+            gotoxy(x+w-1,y+i+1);
+            printf("]");
+        }
+        else{
+            gotoxy(x,y+i+1);
+            printf("]");
+            gotoxy(x+w-1,y+i+1);
+            printf("[");
+        }
+    }
+    //print tail
+    gotoxy(x,y+h-1);
+    printf("#");
+    for(int i=0;i<(w-2);i++)
+    {
+        printf("-");
+    }
+    printf("#");
+    return;
 }
 
 //must print frist
@@ -131,13 +170,11 @@ static void print_charater(int32_t x,int32_t y,Player *bot){
         case Vulture_Sam:     printf("Vulture_Sam"); break;
         case Willy_the_Kid:   printf("Willy_the_Kid"); break;
     }
-
-
 }
 
 
 //gear
-static void print_player_visual(int32_t x,int32_t y,Player *bot){
+static void print_player_visual(int32_t x,int32_t y,List *game,Player *bot){
 
     print_frame(x,y,35,13);
 
@@ -162,7 +199,7 @@ static void print_player_visual(int32_t x,int32_t y,Player *bot){
     gotoxy(b_x+1,b_y+1);
     printf("/ | \\");
     gotoxy(b_x,b_y+2);
-    printf("(~ X ~)");
+    printf("(~ %d ~)",get_distance(game->current_player,bot));
     gotoxy(b_x+1,b_y+3);
     printf("\\_|_/");
     
@@ -226,7 +263,7 @@ static void print_player_visual(int32_t x,int32_t y,Player *bot){
     }
 }
 
-static void print_card_visual(int32_t x,int32_t y,int32_t card_ID)
+void print_card_visual(int32_t x,int32_t y,Card print)
 {
     FILE *pfile = NULL;
     if((pfile=fopen(CARD_IMG_FILEPATH,"r"))==NULL)
@@ -234,16 +271,16 @@ static void print_card_visual(int32_t x,int32_t y,int32_t card_ID)
         printf("can't open this file\n");
         return;
     }
+    int32_t card_pos = print.card_ID%100;
     
-    int32_t card_pos = card_ID%100;
     
     fseek(pfile,(CARD_WIDTH-1)*CARD_LENGTH*card_pos,SEEK_SET);
     
-    if(card_ID/100 == BLUE_CARD)
+    if(print.card_ID/100 == BLUE_CARD)
     {
         printf("\033[1;34m");
     }
-    else if(card_ID == NULL_CARD)
+    else if(print.card_ID == NULL_CARD)
     {
         printf("\033[30m");
     }
@@ -274,6 +311,83 @@ static void print_card_visual(int32_t x,int32_t y,int32_t card_ID)
     /\ 4
     \/ 4
     */
+    
+    if(print.card_ID != 0){
+        
+        int32_t c = print.suit;
+        switch(c)
+        {
+            case 1:
+                gotoxy(x+10,y+10);
+                printf(" () ");
+                gotoxy(x+10,y+11);
+                printf("()()");
+                break;
+            case 2:
+                gotoxy(x+10,y+10);
+                printf(" /\\ ");
+                gotoxy(x+10,y+11);
+                printf("(__)");
+                break;
+            case 3:
+                printf("\033[1;31m");
+                gotoxy(x+10,y+10);
+                printf("(\\/)");
+                gotoxy(x+10,y+11);
+                printf(" \\/ ");
+                break;
+            case 4:
+                printf("\033[1;31m");
+                gotoxy(x+10,y+10);
+                printf(" /\\ ");
+                gotoxy(x+10,y+11);
+                printf(" \\/ ");
+                break;
+        }
+        int32_t d = print.face;
+        switch(d)
+        {
+            case 1:
+                gotoxy(x+14,y+10);
+                printf("A");
+                gotoxy(x+14,y+11);
+                printf("A");
+                break;
+            case 10:
+                gotoxy(x+14,y+10);
+                printf("T");
+                gotoxy(x+14,y+11);
+                printf("T");
+                break;
+            case 11:
+                gotoxy(x+14,y+10);
+                printf("J");
+                gotoxy(x+14,y+11);
+                printf("J");
+                break;
+            case 12:
+                gotoxy(x+14,y+10);
+                printf("Q");
+                gotoxy(x+14,y+11);
+                printf("Q");
+                break;
+            case 13:
+                gotoxy(x+14,y+10);
+                printf("K");
+                gotoxy(x+14,y+11);
+                printf("K");
+                break;
+            default :
+                gotoxy(x+14,y+10);
+                printf("%d",d);
+                gotoxy(x+14,y+11);
+                printf("%d",d);
+        }
+        
+        
+        
+        printf("\033[0m\n");
+    }
     
     fclose(pfile);
     return;
@@ -341,8 +455,10 @@ void print_system_msg(int32_t mode,char* str)
     {
         for(int i=SYS_BAR_ROW-1;i>0 ;i--)
         {
+            memset(sys_log[i],0,SYS_MSG_LENGTH);
             strncpy(sys_log[i],sys_log[i-1],strlen(sys_log[i-1]));
         }
+        memset(sys_log[0],0,SYS_MSG_LENGTH);
         strncpy(sys_log[0],str,strlen(str));
     }
     else
@@ -373,7 +489,9 @@ void print_board(List *game,Player *bot)
     printf("exit [_other_]");
     
     //middle card
-    print_card_visual(44,24,0);
+    Card Null_card;
+    memset(&Null_card,0,sizeof(Card));
+    print_card_visual(44,24,Null_card);
     gotoxy(44,23);
     printf("[             ] %d",game->pile_pos);
     gotoxy(45,23);
@@ -382,7 +500,7 @@ void print_board(List *game,Player *bot)
         printf("=");
     }
     
-    print_card_visual(62,24,game->discard_pile[game->discard_pos-1].card_ID);
+    print_card_visual(62,24,game->discard_pile[game->discard_pos-1]);
     
     //print other
     Player *current = bot->next;
@@ -391,7 +509,7 @@ void print_board(List *game,Player *bot)
     
     while(current != bot)
     {
-        print_player_visual(player_pos[count-1][0], player_pos[count-1][1],current);
+        print_player_visual(player_pos[count-1][0], player_pos[count-1][1],game,current);
         gotoxy(player_pos[count-1][0]+27, player_pos[count-1][1]+12);
         printf("[_%d_]",count);
         
@@ -407,13 +525,15 @@ void print_board(List *game,Player *bot)
         int32_t card_pos = i+game->card_page*6;
         if(card_pos<(bot->cards_num))
         {
-            print_card_visual(9+i*17,40,(bot->hand_card[card_pos].card_ID));
+            print_card_visual(9+i*17,40,bot->hand_card[card_pos]);
             gotoxy(14+i*17,51);
             printf("[_%d_]",i+1);
         }
         else
         {
-            print_card_visual(9+i*17,40,0);
+            Card Null_card;
+            memset(&Null_card,0,sizeof(Card));
+            print_card_visual(9+i*17,40,Null_card);
         }
     }
     

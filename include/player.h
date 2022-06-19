@@ -14,3 +14,4 @@ Card *discard_gear(List *game,Player *bot,int32_t gear_ID);
 
 Card *select_discard(List *game,Player *bot);
 int32_t get_temp_player_play(List *game,Player *bot);
+int32_t get_distance(Player *bot1,Player *bot2);

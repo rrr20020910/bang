@@ -13,7 +13,7 @@ static int32_t compare(int32_t a,int32_t b)
     return a;
 }
 
-static int32_t get_distance(Player *bot1,Player *bot2)
+int32_t get_distance(Player *bot1,Player *bot2)
 {
     int32_t left = 0;
     int32_t right = 0;
@@ -138,14 +138,14 @@ int32_t get_temp_player_play(List *game,Player *bot)
     {
         print_board(game,bot);
         int32_t sel=0;
-        printf("please discard:");
-        scanf("%d",&sel);
+        printf("Please select a card:");
+        CHECK_UNTIL(sel>=1&&sel<=7,sel,"Please input valid move!!");
+        
         //0,7 page control
         if(sel == 0)
         {
             if(game->card_page == 0)
             {
-                printf("you can't do that");
                 continue;
             }
             game->card_page --;
@@ -161,9 +161,9 @@ int32_t get_temp_player_play(List *game,Player *bot)
         }
         if(sel < 7 && sel > 0)
         {
-            if(sel+(game->card_page)*6-1 < bot->cards_num)
+            if((sel+(game->card_page)*6-1) < bot->cards_num)
             {
-                return sel+(game->card_page)*6-1;
+                return (sel+(game->card_page)*6-1);
             }
         }
     }

@@ -144,6 +144,13 @@
     usleep(2000000); \
 })
 
+#define CHECK_UNTIL(condition, var, format, args...) ({ \
+    scanf("%d",&var); \
+    fflush(stdin); \
+    if (!(condition)) {printf(format"\nENTER TO CONTINUE......", ##args); fgetc(stdin); fflush(stdin);}\
+})
+
+
 typedef struct _sCard Card;
 typedef struct _sPlayer Player;
 typedef struct _sList List;
@@ -181,6 +188,7 @@ typedef struct _sList
     
     int32_t card_page;
     int32_t isInJail;
+    int32_t gear_change;
 
     int32_t pile_pos;
     Card pile[PILE_NUM];
