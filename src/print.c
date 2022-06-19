@@ -5,12 +5,6 @@
 #include "player.h"
 #include "card.h"
 
-#define MAX_HAND_PRINT 6
-
-#define CARD_WIDTH   17
-#define CARD_LENGTH  12
-#define CARD_IMG_FILEPATH "./assets/card-image.txt"
-
 // TODO: system msgm
 // somebody play card 
 // somebody die
