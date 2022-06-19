@@ -125,6 +125,7 @@ void print_rules(List *game,char ***player_name)
                 
             }
         }
+        if(Rule_page == 0) Rule_page=9;
         if(Rule_page > 9) Rule_page=1;
     }
     print_menu(game,player_name);
