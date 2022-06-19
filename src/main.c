@@ -74,7 +74,10 @@ int main()
             {
                 break;
             }
-            
+            if(game.win_role != 0)
+            {
+                break;
+            }
         }
         
         //win check
