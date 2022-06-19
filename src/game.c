@@ -23,14 +23,14 @@ int32_t play_card(List *game,Player *bot,int32_t sel)
         printf("fail play\n");
         return 0;
     }
-    
+
     if((bot->hand_card[sel].card_ID)/100 == 1)
     {
         SYS_BAR_PRINT("%s play %s",bot->user_name,game->current_card->name);
         game->discard_pile[game->discard_pos] = *game->current_card;
         game->discard_pos++;
     }
-    
+
     for(int i=sel;i<(bot->cards_num);i++)
     {
         bot->hand_card[i] = bot->hand_card[i+1];
@@ -298,6 +298,7 @@ void discard_stage(List *game,Player *bot)
 
     game->bang_play = 0;
     game->isInJail = 0;
+    game->gear_change = 0;
     return;
 }
 
