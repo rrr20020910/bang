@@ -138,7 +138,6 @@ int32_t get_temp_player_play(List *game,Player *bot)
     {
         print_board(game,bot);
         int32_t sel=0;
-        printf("Please select a card:");
         CHECK_UNTIL(sel>=1&&sel<=7,sel,"Please input valid move!!");
         
         //0,7 page control
@@ -173,10 +172,12 @@ int32_t get_temp_player_play(List *game,Player *bot)
 
 Card *select_discard(List *game,Player *bot)
 {
-    
+    INFO_MSG_PRINT("Please select a to discard:");
     int32_t discard_pos = get_temp_player_play(game,bot);
     
     Card *discard_card = &bot->hand_card[discard_pos];
+    
+    SYS_BAR_PRINT("%s discard %s",bot->user_name,card_name(discard_card->card_ID));
     
     Card *current = &(bot->hand_card[discard_pos]);
     game->discard_pile[game->discard_pos] = *current;
@@ -195,6 +196,7 @@ Card *select_discard(List *game,Player *bot)
     {
         if(bot->cards_num == 0)
         {
+            SYS_BAR_PRINT("%s use Suzy_Lafayette skill draw a card",bot->user_name);
             get_card(draw(game),bot);
         }
     }
