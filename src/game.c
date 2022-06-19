@@ -18,6 +18,14 @@ int32_t play_card(List *game,Player *bot,int32_t sel)
     Card *current = &(bot->hand_card[sel]);
     game->current_card = current;
     
+    if(bot->hand_card[sel].card_ID == 0){
+    
+        SYS_BAR_PRINT("Our apologize for that thing happen,you can draw another");
+        get_card(draw(game),bot);
+        return 0;
+    }
+    
+    
     if(bot->hand_card[sel].ability(game,bot))
     {
         printf("fail play\n");
