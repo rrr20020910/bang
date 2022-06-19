@@ -6,7 +6,6 @@
 // game function
 int32_t get_player_move(List *game,Player *bot);
 
-void set_player(List *game,Player *bot);
 void set_role(List *game);
 void set_character(List *game);
 Player *get_sheriff(List *game);

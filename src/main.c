@@ -8,15 +8,17 @@
 
 int main()
 {   
-    print_menu();
-    int32_t player_num = 6;
     List game;
     memset(&game,0,sizeof(List));
     game.next = NULL;
-    game.players_num = player_num;
     
     build_pile(&game);
-    Player bot[player_num];
+    
+
+    char **player_name = NULL;
+    start_of_the_game(&game,&player_name);
+    
+    Player bot[game.players_num];
     
     //get_role
     int32_t role_list[8] = {
@@ -31,28 +33,31 @@ int main()
     };
                       
     srand(time(NULL));
-    for(int i=0;i<player_num;i++)
+    for(int i=0;i<game.players_num;i++)
     {
-        int32_t rand_pos = rand()%player_num;
+        int32_t rand_pos = rand()%game.players_num;
         int32_t temp = role_list[i];
         role_list[i] = role_list[rand_pos];
         role_list[rand_pos] = temp;
     }
-    
+
+    printf("%s\n",player_name[1]);
+
     //player_info
-    for(int i=0;i<player_num;i++)
+    for(int i=0;i<game.players_num;i++)
     {
         memset(&bot[i],0,sizeof(Player));
-        set_player(&game,&bot[i]);
+        strncpy(bot[i].user_name,player_name[i],strlen(player_name[i]));
         build_list(&game,bot[i]);
     }
+
+
     set_role(&game);
     set_character(&game);
     
     game.next = get_sheriff(&game);
     Player *current = game.next;
     game.current_player = current;
-    printf("bugger\n");
     
     while(1)
     {
