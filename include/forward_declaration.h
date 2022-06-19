@@ -124,7 +124,7 @@
 
 #define CARD_WIDTH   17
 #define CARD_LENGTH  12
-#define CARD_IMG_FILEPATH "./assets/card-image"
+#define CARD_IMG_FILEPATH "./assets/card-image.txt"
 
 #define LIMIT_OPTION_RANGE(var) (var<0||var>10)
 

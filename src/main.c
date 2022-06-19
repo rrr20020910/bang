@@ -4,9 +4,11 @@
 #include "print.h"
 #include "player.h"
 #include "card.h"
+#include "menu.h"
 
 int main()
-{    
+{   
+    print_menu();
     int32_t player_num = 6;
     List game;
     memset(&game,0,sizeof(List));

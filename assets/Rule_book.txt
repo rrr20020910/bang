@@ -45,14 +45,22 @@
 |          A player's hand size limit depends on how much health he has, so remember keep as much health as you can              | 
 |          to keep your advantage.                                                                                               |
 |                                                                                                                                |
-|                                                                                                        page   1   of  9        |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                        Page   1   of  9        |
 \================================================================================================================================/
 /================================================================================================================================\
 |                                                                                                                                |
 | Distance to players:                                                                                                           |
 |                                                                                                                                |
 |     Your distance to other players will determine whether you can effect them with your cards or not.                          |
-|     You can increase or decrease the distance by skill of your characer or using equipments.                                    |
+|     You can increase or decrease the distance by skill of your characer or using equipments.                                   |
 |     THe distance to other players will be shown on the top right of the character's interface.                                 |
 |                                                                                                                                |
 | Character eliminations:                                                                                                        |
@@ -78,6 +86,13 @@
 | That's totally it! You can have fun playing the game while understanding all the importany rules!                              |
 |                                                                                                                                |
 | If you want to check all the character skills and the cards, go to the next page to know more about them.                      |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
 |                                                                                                                                |
 |                                                                                                                                |
 |                                                                                                                                |
@@ -145,6 +160,13 @@
 |                                                                                                                                |
 |                                                                                                                                |
 |                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
 |                                                                                                        Page   3   of  9        |
 \================================================================================================================================/
 /================================================================================================================================\
@@ -193,6 +215,13 @@
 |      |single       |                                                                                                           |
 |      |health       |                                                                                                           |
 |      \-------------/                                                                                                           |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
 |                                                                                                                                |
 |                                                                                                                                |
 |                                                                                                        Page   4   of  9        |
@@ -245,6 +274,13 @@
 |     \-------------/                                                                                                            |
 |                                                                                                                                |
 |                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
 |                                                                                                        Page   5   of  9        |
 \================================================================================================================================/
 /================================================================================================================================\
@@ -293,6 +329,13 @@
 |     |every player |                                                                                                            |
 |     |without miss |                                                                                                            |
 |     \-------------/                                                                                                            |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
 |                                                                                                                                |
 |                                                                                                                                |
 |                                                                                                        Page   6   of  9        |
@@ -345,6 +388,13 @@
 |     \-------------/  \-------------/                                                                                           |
 |                                                                                                                                |
 |                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
 |                                                                                                        Page   7   of  9        |
 \================================================================================================================================/
 /================================================================================================================================\
@@ -395,6 +445,13 @@
 |     \-------------/                                                                                                            |
 |                                                                                                                                |
 |                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
 |                                                                                                        Page   8   of  9        |
 \================================================================================================================================/
 /================================================================================================================================\
@@ -405,16 +462,20 @@
 |                                                                                                                                |
 |          Black Jack (Health 4): During the draw card phase, you need to show your second card.                                 |
 |                                 If the second card is red, you can draw and extra card.                                        |
+|                                                                                                                                |       
 |          Calamity Janet (Health 4): You're "Bang!" can have the same effect as "Miss!"                                         |
-|                                     You're "Miss!" also have the same effect as "Bang!"                                        |
+|                                     You're "Miss!" also have the same effect as "Bang!"                                        | 
+|                                                                                                                                |
 |          El Gringo (Health 3): If you lose your health because of another player, you can draw a card from that player.        |
 |                                                                                                                                |
 |          Jesse Jones (Health 4): During the draw card phase, the first card can draw from any player's hand.                   |
 |                                                                                                                                |
 |          Jourdonnais (Health 4): When other players attack you with "Bang!" you have a chance to dodge the attack.             |
 |                                  If you equipped "Barrel!", there''s more chance you can dodge the attack.                     |
+|                                                                                                                                |
 |          Kit Carlson (Health 4): During the draw card phase, you can draw three cards, choose two of them be in your hand,     |
 |                                  then discard the other card.                                                                  |
+|                                                                                                                                |
 |          Lucky Duke (Health 4): You have a hight success rate of doing anything.                                               |
 |                                                                                                                                |
 |          Paul Regret (Health 3): Distance which every other player looks at you increase 1.                                    |
@@ -425,10 +486,13 @@
 |                                                                                                                                |
 |          Sid Ketchum (Health 4): You can discard two of your hand to heal one health point.                                    |
 |                                  The timing to use the skill is like "Beer".                                                   |
+|                                                                                                                                |
 |          Slab the Killer (Health 4): If you play "Bang!" to other players, they have to play two "Miss!" to avoid the attack.  |
 |                                      If they succeed to dodge the attack with barrel, they still need to play a "Miss!".       |
+|                                                                                                                                |
 |          Suzy Lafayette (Health 4): When there's no card in you hand, you can draw a card from the deck.                       |
 |                                     You cannot draw cards during the duel.                                                     |
+|                                                                                                                                |
 |          Vulture Sam (Health 4): When the other player is eliminated, you can add their equipment and hand to your hand.       |
 |                                                                                                                                |
 |          Willy the kid (Health 4): You can play as many "Bang!" as ou want in the same turn.                                   |
