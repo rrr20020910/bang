@@ -124,7 +124,7 @@
 
 #define CARD_WIDTH   17
 #define CARD_LENGTH  12
-#define CARD_IMG_FILEPATH "./assets/card-image"
+#define CARD_IMG_FILEPATH "./assets/card-image.txt"
 
 #define SYS_BAR_ROW 15
 #define SYS_MSG_LENGTH 64
