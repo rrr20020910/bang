@@ -51,9 +51,9 @@ Player *select_other_player(List *game,Player *bot)
 {
     Player *current = bot;
     
-    printf("please select a player:");
+    printf("Please select a player:");
     int32_t sel = 0;
-    CHECK_UNTIL(sel>=1&&sel<=game->players_num-1,sel,"please select a valid player");
+    CHECK_UNTIL(sel>=1&&sel<=game->players_num-1,sel,"Please select a valid player");
     
     if(sel > game->players_num || sel <= 0){
         return NULL;
@@ -201,7 +201,7 @@ Card *select_discard(List *game,Player *bot)
     {
         if(bot->cards_num == 0)
         {
-            SYS_BAR_PRINT("%s use Suzy_Lafayette skill draw a card",bot->user_name);
+            SYS_BAR_PRINT("%s use Suzy_Lafayette's skill to draw a card",bot->user_name);
             get_card(draw(game),bot);
         }
     }
