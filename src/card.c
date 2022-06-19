@@ -41,8 +41,6 @@ static int32_t play_specify_card(List *game,Player *bot,int32_t card_id)
     
     int32_t sel = get_temp_player_play(game,bot);
 
-    CHECK_UNTIL(sel>=0&&sel<=7,sel,"You can't do that!!\n Please input valid move!!");
-
     //======Calamity_Janet=====
     if(bot->charater_ID == Calamity_Janet)
     {
@@ -56,11 +54,11 @@ static int32_t play_specify_card(List *game,Player *bot,int32_t card_id)
     {
         return 0;
     }
-    printf("HHHHHHHHHHHHH\n");
+
     Card *current = &(bot->hand_card[sel]);
     game->discard_pile[game->discard_pos] = *current;
     game->discard_pos++;
-    printf("HHHHHHHHHHHHH\n");
+    
     for(int i=sel;i<(bot->cards_num);i++)
     {
         bot->hand_card[i] = bot->hand_card[i+1];
@@ -416,12 +414,23 @@ static int32_t General_Store(List *game,Player *bot)
     Player *current = bot;
     for(int i=0;i<(game->players_num)-1;i++)
     {
-        //List card
-        for(int j=0;j<(game->players_num)-i;j++)
+        print_store(1,1,112,14);
+        for(int i=0;i<6;i++)
         {
-            printf("%d) ",j+1);
-            print_card(*store[j]);
+            if(i < game->players_num)
+            {
+                print_card_visual(5+i*17,2,*store[i]);
+                gotoxy(7+i*17,13);
+                printf("[_%d_]",i+1);
+            }
+            else
+            {
+                Card Null_card;
+                memset(&Null_card,0,sizeof(Card));
+                print_card_visual(5+i*17,2,Null_card);
+            }
         }
+        gotoxy(2,16);
         printf("please select a card(General_Store): ");
         int32_t sel = 0;
         scanf("%d",&sel);
