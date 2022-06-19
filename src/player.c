@@ -105,6 +105,7 @@ void get_card(Card *new_card,Player *bot)
 //=================\/===
 Card *draw(List *game)
 {
+    pile_remain_manage(game);
     int32_t ori_pos = game->pile_pos;
     game->pile_pos++;
     return &game->pile[ori_pos];
