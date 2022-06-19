@@ -11,14 +11,9 @@
 })
 
 #define CHECK_UNTIL(condition, var, format, args...) ({ \
-    while (1) { \
-        scanf("%d",&var); \
-        fflush(stdin); \
-        if (!(condition)) printf(format"\n", ##args);\
-        else break; \
-        usleep(2000000); \
-        printf("\r"); \
-    } \
+    scanf("%d",&var); \
+    fflush(stdin); \
+    if (!(condition)) printf(format"\nENTER TO CONTINUE......", ##args); fgetc(stdin); fflush(stdin);\
 })
 
 #define SWAP_INT(var1,var2) ({ \
