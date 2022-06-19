@@ -105,18 +105,6 @@ int32_t get_player_move(List *game,Player *bot)
     return 0;
 }
 
-// set_player      ||     
-//=================\/===
-void set_player(List *game,Player *bot)
-{
-    printf("please enter user name : ");
-    char name[16];
-    scanf("%s",name);
-    strcpy(bot->user_name,name);
-    
-    return;
-}
-
 void set_role(List *game)
 {
     int32_t role_list[8] = {

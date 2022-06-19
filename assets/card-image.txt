@@ -102,9 +102,9 @@
 |   ()   /    |
 |   ()  /     |
 |=============|
-|Damage       |
-|every player |
+|Hurt enemies |
 |without bang |
+|             |
 \-------------/
 /-------------\
 | Gatling     |
@@ -114,9 +114,9 @@
 | /\  /\  ~   |
 |             |
 |=============|
-|Damage       |
-|every player |
+|Hurt enemies |
 |without miss |
+|             |
 \-------------/
 /-------------\
 | Saloon      |
@@ -174,9 +174,9 @@
 | (__()  |___||
 |(__()()~~~'  |
 |=============|
-|Chances      |
-|to receive   |
-|3 damage     |
+|Chances to   |
+|take 3 damage|
+|             |
 \-------------/
 /-------------\
 | Barrel!     |
@@ -186,9 +186,9 @@
 | \=\\==\\_/  |
 |  """""""    |
 |=============|
-|Chances      |
-|to evade     |
-|attacks      |
+|Chances to   |
+|evade attacks|
+|             |
 \-------------/
 /-------------\
 | Mustang     |
@@ -198,9 +198,9 @@
 |   |/_____|\ |
 |   / |  / |  |
 |=============|
-|Other players|
-|to your      |
-|distance + 1 |
+|Player to you|
+|distance+1   |
+|             |
 \-------------/
 /-------------\
 | Appaloosa   |
@@ -210,9 +210,9 @@
 | /|/____\|   |
 |  / \  / \   |
 |=============|
-|Distace to   |
-|every other  |
-|player-1     |
+|You to player|
+|distance-1   |
+|             |
 \-------------/
 /-------------\
 | Schofield   |
@@ -236,7 +236,7 @@
 |=============|
 |You can      |
 |play multiple|
-|"Bang!"       |
+|"Bang!"      |
 \-------------/
 /-------------\
 | Remington   |
