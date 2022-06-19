@@ -561,14 +561,9 @@ void print_board(List *game,Player *bot)
     
     //role
     print_role(128,44,bot);
-    
-    
+
     //character
-    gotoxy(118,51);
-    printf("abcdefghijk");
-    gotoxy(118,52);
-    printf("abcdefghijkabcdefghijk");
-    
+
     //gear
     
     for(int i = 0;i<6;i++)

@@ -24,9 +24,8 @@ void menu_induction_control(List *game,char ***player_name)
         }
         case 2:
         {
-            printf("Gamemode.\n");
-            //print_menu(game);
-            return;
+            WARNING_MSG_PRINT("Please look forward to next version:TEH_WILD_WEST! would bring more feature");
+            print_menu(game,player_name);
         }
         case 3:
         {
@@ -36,15 +35,14 @@ void menu_induction_control(List *game,char ***player_name)
         case 4:
         {
             fflush(stdin); 
-            printf("\nGood Bye!!\nENTER TO CONTINUE......"); 
+            printf("\033[36m\nGood Bye!!\nthank for playing our demo,please look forward to our group new version and more cool function in furture\033[0m\n"); 
             fgetc(stdin); 
-            system("clear");
             exit(0);
         }
         default:
         {
             print_menu(game,player_name);
-
+             
         }
     }
 }
