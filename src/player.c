@@ -139,8 +139,8 @@ int32_t get_temp_player_play(List *game,Player *bot)
         print_board(game,bot);
         int32_t sel=0;
         printf("please select a card:");
-        scanf("%d",&sel);
-        //CHECK_UNTIL(sel>=1&&sel<=7,sel,"Please input valid move!!");
+        //scanf("%d",&sel);
+        CHECK_UNTIL(sel>=1&&sel<=7,sel,"Please input valid move!!");
         
         //0,7 page control
         if(sel == 0)
