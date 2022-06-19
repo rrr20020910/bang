@@ -5,12 +5,6 @@
 #include "player.h"
 #include "card.h"
 
-#define MAX_HAND_PRINT 6
-
-#define CARD_WIDTH   17
-#define CARD_LENGTH  12
-#define CARD_IMG_FILEPATH "./assets/card-image"
-
 // TODO: system msgm
 // somebody play card 
 // somebody die
@@ -327,8 +321,8 @@ static void print_next_turn(int32_t x,int32_t y)
     printf("/  End_turn [_9_] ");
 }
 
-//mode=0 : read to sys_log, otherwise : print system info
-void print_system_msg(int32_t mode,char* str) 
+// mode=0 : read to sys_log, otherwise : print system info
+void print_system_msg(int32_t mode,char* str)
 {
     int32_t x = 81,y = 23;
     static char **sys_log = NULL;
@@ -350,7 +344,6 @@ void print_system_msg(int32_t mode,char* str)
         }
         memset(&(sys_log[0]),0,SYS_MSG_LENGTH);
         strncpy(sys_log[0],str,strlen(str));
-      
     }
     else
     {

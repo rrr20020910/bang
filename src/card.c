@@ -40,7 +40,9 @@ static int32_t play_specify_card(List *game,Player *bot,int32_t card_id)
     INFO_MSG_PRINT("You need to play %s!!",card_name(card_id));
     
     int32_t sel = get_temp_player_play(game,bot);
-    printf("HHHHHHHHHHHHH\n");
+
+    CHECK_UNTIL(sel>=0&&sel<=7,sel,"You can't do that!!\n Please input valid move!!");
+
     //======Calamity_Janet=====
     if(bot->charater_ID == Calamity_Janet)
     {
@@ -688,18 +690,24 @@ void build_pile(List *game)
 
 void pile_remain_manage(List *game)
 {
-    if(((game->pile)[0]).card_ID == NULL_CARD)
+    if(game->pile[game->pile_pos].card_ID == NULL_CARD) // check card pile empty
     {
-        memcpy(game->pile,game->discard_pile,sizeof(Card)*CARD_NUM);
-        memset(&(game->discard_pile),0,sizeof(Card)*CARD_NUM);
-        game->pile_pos = CARD_NUM - game->discard_pos;
+        memcpy(game->pile,game->discard_pile,sizeof(Card)*PILE_NUM);
+        memset(&(game->discard_pile),0,sizeof(Card)*PILE_NUM);
+        
         game->discard_pos = 0;
-
+        game->pile_pos = 0;
+        int32_t current_pile_num = 0;
+        for(int i=0;game->pile[i].card_ID != NULL_CARD;i++)
+        {   
+            current_pile_num = i + 1;
+        }
+        
         srand(time(NULL));
         
-        for(int i=0;i<CARD_NUM-game->pile_pos;i++)
+        for(int i=0;i<current_pile_num;i++)
         {
-            int32_t rand_pos = rand()%CARD_NUM;
+            int32_t rand_pos = rand()%(current_pile_num);
             Card temp = game->pile[i];
             game->pile[i] = game->pile[rand_pos];
             game->pile[rand_pos] = temp;

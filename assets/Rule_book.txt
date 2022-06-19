@@ -1,0 +1,513 @@
+/================================================================================================================================\
+| Welcome to "Bang!"                                                                                                             |
+|                                                                                                                                |
+| "Bang!" is a turn-based game with multiple factions and roles:                                                                 |
+|                                                                                                                                |
+|  __/\__  Sheriff: The Sheriff must eliminate all the Outlaws and the Renegade, to protect the law and order.                   |
+|  \ \/ /           The Sheriff plays with one additional bullets(health), and he is first when the agem starts.                 |
+|  /_/\_\           When the Sheriff dies, the game is over and the Outlaws are victorious.                                      |
+|    \/             When it is a 3-player game, there is no Sheriff.                                                             |
+|                                                                                                                                |
+|    /\    Deputy Sheriff: The Deputy Sheriff must protect the Sheriff, and share the same goal with the Sheriff.                |
+|   /\/\                                                                                                                         | 
+|   \/\/                                                                                                                         |
+|    \/                                                                                                                          |
+|                                                                                                                                |
+|  _/v\_   The Outlaws: The Outlaws hunt down the Sheriff together to victory.                                                   |
+|  ('_')                When the Sheriff dies, the Outlaws win the game.                                                         |
+|   /|\L                                                                                                                         |
+|   / \                                                                                                                          |
+|                                                                                                                                |
+|  {_/\_}  The Renegade: The Renegade must be the last man standing to win the game.                                             |
+|  (d  b)                He will help the Sheriff at first, but he will backstab them in any time!                               |
+|   (==)                                                                                                                         |
+|    \/                                                                                                                          |
+|                                                                                                                                |
+|                                                                                                                                |
+| Game Play:                                                                                                                     |  
+|                                                                                                                                |
+|   1) Draw card phase                                                                                                           |
+|          In this phase, the player can draw two cards in top of the card deck (or more for some characters).                   |
+|          If the card deck is empty, the discard pile will be shuffled and turned into the new deck.                            |
+|                                                                                                                                |
+|   2) Play card phase                                                                                                           |
+|          In this phase, you can play any number of the cards to help yourself or hurt the other players, except:               |
+|                                                                                                                                |
+|          (1) You can only play one "Bang!" card in turn (except some weapons and character).                                   |
+|          (2) You can only equip one of a kind of equipment in play.                                                            |
+|              For example: If you already have a barrel, you can't play another one.                                            |
+|          (3) You can only equip one weapon at a time.                                                                          |
+|              If you want to change your weapon, then play the new weapon card twice the switch to the new weapon.              |
+|              (We design this double-check feature to prevent players to accident;y switch their weapons.)                      |
+|                                                                                                                                |
+|   3) Discard phase                                                                                                             |
+|          In this phase, you have to discard cards that exceeds the hand size limit.                                            |
+|          A player's hand size limit depends on how much health he has, so remember keep as much health as you can              | 
+|          to keep your advantage.                                                                                               |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                        Page   1   of  9        |
+\================================================================================================================================/
+/================================================================================================================================\
+|                                                                                                                                |
+| Distance to players:                                                                                                           |
+|                                                                                                                                |
+|     Your distance to other players will determine whether you can effect them with your cards or not.                          |
+|     You can increase or decrease the distance by skill of your characer or using equipments.                                   |
+|     THe distance to other players will be shown on the top right of the character's interface.                                 |
+|                                                                                                                                |
+| Character eliminations:                                                                                                        |
+|                                                                                                                                |
+|     When you run out of lives, you are eliminated, unless there's a beer in your hand and you can immediately play it.         |
+|     When you are eliminated, you have to show your role and discard all you have, which includes your hand                     |
+|     and your equipments.                                                                                                       |
+|                                                                                                                                |
+| Penalty and rewards:                                                                                                           |
+|                                                                                                                                |
+|     1) If the Sheriff eliminates the Deputy Sheriff, the Sheriff have to discard all of his hand and his equipments.           |
+|     2) If a player eliminates an Outlaw(even the player himself is an Outlaw), he can draw 3 cards from the card deck.         |
+|                                                                                                                                |
+| Game endings:                                                                                                                  |
+|                                                                                                                                |
+|     The game will end under these circumstances:                                                                               |
+|                                                                                                                                |
+|     1) When the Sherrif is eliminated, the Renegade wins if he's the only one alive.                                           |
+|        Otherwise, the Outlaws win the game.                                                                                    |
+|                                                                                                                                |
+|     2) When all of the Outlaws and the Renegade is eliminated, the Sheriff and the Deputy Sheriff win the game.                |
+|                                                                                                                                |
+| That's totally it! You can have fun playing the game while understanding all the importany rules!                              |
+|                                                                                                                                |
+| If you want to check all the character skills and the cards, go to the next page to know more about them.                      |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                        Page   2   of  9        |
+\================================================================================================================================/
+/================================================================================================================================\
+|                                                                                                                                |
+|  Cards:                                                                                                                        |
+|                                                                                                                                |
+|      Weapons:                                                                                                                  |
+|                                                                                                                                |
+|      /-------------\  /-------------\  /-------------\  /-------------\                                                        |
+|      |  Schofield  |  | Remington   |  |Rev.carabine |  | Winchester  |                                                        |
+|      |             |  |             |  |      /      |  |             |                                                        |
+|      |    ___==___ |  |      _--__  |  |     /       |  |     ________|                                                        |
+|      | \(   ==_/-  |  | ___//___====|  |    //       |  | __//)       |                                                        |
+|      |  /  C)---   |  |)_==(/C      |  |   /=]       |  |(_/C         |                                                        |
+|      | |__(        |  |             |  |   )_/       |  |             |                                                        |
+|      |=============|  |=============|  |=============|  |=============|                                                        |
+|      |             |  |             |  |             |  |             |                                                        |
+|      |Distance+1   |  |Distance+2   |  |Distance+3   |  |Distance+4   |                                                        |
+|      \-------------/  \-------------/  \-------------/  \-------------/                                                        |
+|                                                                                                                                |
+|      These weapons can increase your shooting range, then you can damage enemies with further distance.                        |
+|      You can only equip one weapon at a time, if you want to equip another weapon, you need to discard your old ones.          |
+|      Remember, weapons do NOT change the distance between players, it only increase the maximize shooting range.               |
+|                                                                                                                                |
+|      Volcanic                                                                                                                  |
+|                                                                                                                                |
+|      /-------------\                                                                                                           |
+|      | Volcanic    |                                                                                                           |
+|      |===------)/  |                                                                                                           |
+|      |   )_____ ]  |                                                                                                           |
+|      |     () \ \  |                                                                                                           |
+|      |       ()\ \ |                                                                                                           |
+|      |         )_) |                                                                                                           |
+|      |=============|                                                                                                           |
+|      |You can      |                                                                                                           |
+|      |play multiple|                                                                                                           |
+|      |"Bang"       |                                                                                                           |
+|      \-------------/                                                                                                           |
+|                                                                                                                                |
+|      This special weapon can allow you play multiple "Bang" card in the one turn.                                              |
+|      Unfortunenately, this weapon cannot increase your shooting range.                                                         |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                        Page   3   of  9        |
+\================================================================================================================================/
+/================================================================================================================================\
+|                                                                                                                                |
+|      Bang!:                                                                                                                    |
+|                                                                                                                                |
+|      /-------------\                                                                                                           |
+|      | Bang!       |      This basic attack card can deal one damage to a target inside your shooting range.                   |
+|      |             |      In normal circumstances, you can only play one "Bang!" each turn.                                    |
+|      |    ()/      |      You cannot deal damage to target outside your shooting range.                                        |
+|      |  ==>\       |                                                                                                           |
+|      |     /       |                                                                                                           |
+|      |    /\       |      If someone played "Indians", you can play "Bang!" to avoid damage.                                   |
+|      |=============|                                                                                                           |
+|      |Deal one     |                                                                                                           |
+|      |damage       |                                                                                                           |
+|      |to target    |                                                                                                           |
+|      \-------------/                                                                                                           |
+|                                                                                                                                |
+|      Miss!:                                                                                                                    |
+|                                                                                                                                |
+|      /-------------\                                                                                                           |
+|      | Miss!       |     If someone played "Bang!" to damage you, you can play this card to avoid damage.                      |
+|      |             |     You can also avoid damage by using this card to dodge "Gatling".                                      |
+|      |     ==>     |                                                                                                           |
+|      |    ____()_  |                                                                                                           |
+|      |   /|        |                                                                                                           |
+|      |             |                                                                                                           |
+|      |=============|                                                                                                           |
+|      |Evade        |                                                                                                           |
+|      |the          |                                                                                                           |
+|      |attack       |                                                                                                           |
+|      \-------------/                                                                                                           |
+|                                                                                                                                |
+|      Beer:                                                                                                                     |
+|                                                                                                                                |
+|      /-------------\                                                                                                           |
+|      | Beer!       |     This card can heal the player for one health point(one bullet) in their turn.                         |
+|      |      *      |     Also, you can play this card anytime when your health becomes 0.                                      |
+|      |   |*__|=\   |                                                                                                           |
+|      |   |  ~| |   |     "Beer" will not work when there's only two players remaining.                                         |
+|      |   |_~_|=/   |                                                                                                           |
+|      |             |                                                                                                           |
+|      |=============|                                                                                                           |
+|      |Heal         |                                                                                                           |
+|      |single       |                                                                                                           |
+|      |health       |                                                                                                           |
+|      \-------------/                                                                                                           |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                        Page   4   of  9        |
+\================================================================================================================================/
+/================================================================================================================================\
+|                                                                                                                                |
+|     Saloon:                                                                                                                    |
+|                                                                                                                                |
+|     /-------------\                                                                                                            |
+|     | Saloon      |     This card can heal everyone on the field for one health point.                                         |
+|     |  __|==|___  |     When your helth becomes 0, you CANNOT heal yourself with "Saloon".                                     |
+|     |  [SALOON_]  |                                                                                                            |
+|     |  |/__ | \|  |                                                                                                            |
+|     |  |||| |  |  |                                                                                                            |
+|     |  |  |====]  |                                                                                                            |
+|     |=============|                                                                                                            |
+|     |Heal         |                                                                                                            |
+|     |every        |                                                                                                            |
+|     |player       |                                                                                                            |
+|     \-------------/                                                                                                            |
+|                                                                                                                                |
+|     StageCoach & Wells Fargo:                                                                                                  |
+|                                                                                                                                |
+|     /-------------\  /-------------\                                                                                           |
+|     | StageCoach  |  | Wells_Fargo |     This type of card allows you to draw additional cards from your deck.                 |
+|     | ______      |  |             |     StageCoach allows you to draw 2 cards, while Wells Fargo allows you to draw 3.        |
+|     | |  |  |   //|  |     __O     |                                                                                           |
+|     | |__|__|[__] |  |   _`\<,_    |                                                                                           |
+|     |  @   @ /  \ |  |  (@)/ (@)   |                                                                                           |
+|     |             |  |             |                                                                                           |
+|     |=============|  |=============|                                                                                           |
+|     |Draw         |  |Draw         |                                                                                           |
+|     |2            |  |3            |                                                                                           |
+|     |cards        |  |cards        |                                                                                           |
+|     \-------------/  \-------------/                                                                                           |
+|                                                                                                                                |
+|     General Store:                                                                                                             |
+|                                                                                                                                |
+|     /-------------\                                                                                                            |
+|     |General_Store|  When this card is played, everyone remaining in the game get a card.                                      |
+|     |      _      |  Number of cards same as the number of the player will reveal, and everyone choose thier cards in turns.   |
+|     |   __/ \__   |                                                                                                            |
+|     |  |_STORE_|  |                                                                                                            |
+|     |  |  | |  |  |                                                                                                            |
+|     |  |=======|  |                                                                                                            |
+|     |=============|                                                                                                            |
+|     |Every        |                                                                                                            |
+|     |player       |                                                                                                            |
+|     |get cards    |                                                                                                            |
+|     \-------------/                                                                                                            |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                        Page   5   of  9        |
+\================================================================================================================================/
+/================================================================================================================================\
+|                                                                                                                                |
+|     Panic:                                                                                                                     |
+|                                                                                                                                |
+|     /-------------\                                                                                                            |
+|     | Panic       |  This card can steal a player's hand if the player's distance is 1 or lower.                               |
+|     |             |  Note that weapons will not change the distance, only horses and scopes do,                                |
+|     |  ~()__  __  |                                                                                                            |
+|     |   ~|\  / /  |                                                                                                            |
+|     |   ~|  /_/   |                                                                                                            |
+|     |  ~/\        |                                                                                                            |
+|     |=============|                                                                                                            |
+|     |Steal        |                                                                                                            |
+|     |a player's   |                                                                                                            |
+|     |card         |                                                                                                            |
+|     \-------------/                                                                                                            |
+|                                                                                                                                |
+|     Cat Balou:                                                                                                                 |
+|                                                                                                                                |
+|     /-------------\                                                                                                            |
+|     | Cat_Balou   |  This card can force a player to discard a card, with no distance limitations.                             |
+|     |      ^ ^    |  This card can also discard a player's equipment, or even "Jail" and "Dynamite".                           |
+|     |     (0_0)   |                                                                                                            |
+|     |  __/__  __  |                                                                                                            |
+|     |  \ \| |/ /  |                                                                                                            |
+|     |   \_\_|_/   |                                                                                                            |
+|     |=============|                                                                                                            |
+|     |Disarm       |                                                                                                            |
+|     |a player's   |                                                                                                            |
+|     |equipment    |                                                                                                            |
+|     \-------------/                                                                                                            |
+|                                                                                                                                |
+|     Gatling:                                                                                                                   |
+|                                                                                                                                |
+|     /-------------\                                                                                                            |
+|     | Gatling     |  When this card is played, it can deal one damage to every other player disregarding distance.             |
+|     |             |  To avoid damage, player can play "Miss!" to dodge it.                                                     |
+|     | O__  ~      |                                                                                                            |
+|     | | [GLT]==]= |  Unlike "Bang!",you can use this card as many times as you want in one turn.                               |
+|     | /\  /\  ~   |                                                                                                            |
+|     |             |                                                                                                            |
+|     |=============|                                                                                                            |
+|     |Damage       |                                                                                                            |
+|     |every player |                                                                                                            |
+|     |without miss |                                                                                                            |
+|     \-------------/                                                                                                            |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                        Page   6   of  9        |
+\================================================================================================================================/
+/================================================================================================================================\
+|                                                                                                                                |
+|     Indians:                                                                                                                   |
+|                                                                                                                                |
+|     /-------------\                                                                                                            |
+|     | Indians     |  This card can deal one damage to every other players, just like "Gatling".                                |
+|     |   / ___     |  However, to avoid damage dealt by "Indians", you need to play "Bang!".                                    |
+|     |   \//OO     |                                                                                                            |
+|     |   //*__*    |  Barrels cannot block the effect of this card.                                                             |
+|     |   ()   /    |                                                                                                            |
+|     |   ()  /     |                                                                                                            |
+|     |=============|                                                                                                            |
+|     |Damage       |                                                                                                            |
+|     |every player |                                                                                                            |
+|     |without bang |                                                                                                            |
+|     \-------------/                                                                                                            |
+|                                                                                                                                |
+|     Duel:                                                                                                                      |
+|                                                                                                                                |
+|     /-------------\                                                                                                            |
+|     | Duel        |  You can challenge other player by playing this card.                                                      |
+|     |         o   |  The player who has beed challenged has to discard a "Bang!", otherwise he loses health.                   |
+|     |   ()    |   |                                                                                                            |
+|     |  /|\   /\   |  If the challenged player played a "Bang!", it's your turn to discard your "Bang!".                        |
+|     |   |         |  Complete the cycle over and over again, until someone can't or don't want to play "Bang!",                |
+|     |  /\         |  the player who loses the duel receives one damage.                                                        |
+|     |=============|                                                                                                            |
+|     |Duel         |  During the duel, players cannot use "Miss!" and "Barrel".                                                 |
+|     |with         |  You can use this card as many times as you want in one turn.                                              |
+|     |a player     |                                                                                                            |
+|     \-------------/                                                                                                            |
+|                                                                                                                                |
+|     Horses:                                                                                                                    |
+|                                                                                                                                |
+|     /-------------\  /-------------\                                                                                           |
+|     | Mustang     |  | Appaloosa   |  Horses can change the distance for you and the other players.                            |
+|     |  _,         |  |         _,  |                                                                                           |
+|     | 00\\\____   |  |   ____\/_0\ |  When you equip "Mustang", your distance which other players look at increases 1.         |
+|     |/_/| \==| \\ |  |  /   // /\/ |  However, the distance which you look at other players is still normal.                   |
+|     |   |/_____|\ |  | /|/____\|   |                                                                                           |
+|     |   / |  / |  |  |  / \  / \   |  When you equip "Appaloosa", other players' distance you looking at decrease 1.           |
+|     |=============|  |=============|  However, the distance which other players look at you stays normal.                      |
+|     |Other players|  |Distace to   |                                                                                           |
+|     |to your      |  |every other  |                                                                                           |
+|     |distance + 1 |  |player-1     |                                                                                           |
+|     \-------------/  \-------------/                                                                                           |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                        Page   7   of  9        |
+\================================================================================================================================/
+/================================================================================================================================\
+|                                                                                                                                |
+|     Jail:                                                                                                                      |
+|                                                                                                                                |
+|     /-------------\  When using prison, play the card in front of any player(disregard distance).                              |
+|     | Jail        |  If there's "Jail" in front of you, then you are sent into prison.                                         |
+|     | __________  |  Before your turn starts, there's a chance for you to jailbreak,                                           |
+|     | |  |__|  |  |  if you succeeded, the "Jail" is discarded and you can start your turn.                                    |
+|     | | <|00|> |  |  Otherwise, discard the "Jail" and your turn will be skipped.                                              |
+|     | | /|__|\ |  |                                                                                                            |
+|     | |(_|52|_)|  |                                                                                                            |
+|     |=============|                                                                                                            |
+|     |Chances      |                                                                                                            |
+|     |to skip      |                                                                                                            |
+|     |turns        |                                                                                                            |
+|     \-------------/                                                                                                            |
+|                                                                                                                                |
+|     Barrel!:                                                                                                                   |
+|                                                                                                                                |
+|     /-------------\                                                                                                            |
+|     | Barrel!     |  If you equip this card, you will have a chance to dodge "Bang!" without using "Miss!".                    |
+|     |  ________   |                                                                                                            |
+|     | /=//==//0\  |  If you didn't dodge the attack, you can still play "Miss!" to avoid damage.                               |
+|     ||=||==||   | |                                                                                                            |
+|     | \=\\==\\_/  |                                                                                                            |
+|     |  """""""    |                                                                                                            |
+|     |=============|                                                                                                            |
+|     |Chances      |                                                                                                            |
+|     |to evade     |                                                                                                            |
+|     |attacks      |                                                                                                            |
+|     \-------------/                                                                                                            |
+|                                                                                                                                |
+|     Dynamite:                                                                                                                  |
+|                                                                                                                                |
+|     /-------------\                                                                                                            |
+|     | Dynamite    |  When you played this card, this card will be in your equipment space.                                     |
+|     |         ___ |  Before your next turn started, the dynamite have a chance to explode, dealing 3 damage to you.            |
+|     |         _|_ |  If the dynamite didn't explode, the dynamite will be passed to another player.                            |
+|     |  ___   |TNT||                                                                                                            |
+|     | (__()  |___||  Players will keep passing the dynamite until it explodes, unless it was discarded by "Cat Balou".         |
+|     |(__()()~~~'  |                                                                                                            |
+|     |=============|                                                                                                            |
+|     |Chances      |                                                                                                            |
+|     |to receive   |                                                                                                            |
+|     |3 damage     |                                                                                                            |
+|     \-------------/                                                                                                            |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                        Page   8   of  9        |
+\================================================================================================================================/
+/================================================================================================================================\
+|                                                                                                                                |
+|     Character skills:                                                                                                          |
+|                                                                                                                                |
+|          Bart Cassidy (Health 4): Everytime you lose health, you can draw one card from the deck.                              |
+|                                                                                                                                |
+|          Black Jack (Health 4): During the draw card phase, you need to show your second card.                                 |
+|                                 If the second card is red, you can draw and extra card.                                        |
+|                                                                                                                                |       
+|          Calamity Janet (Health 4): You're "Bang!" can have the same effect as "Miss!"                                         |
+|                                     You're "Miss!" also have the same effect as "Bang!"                                        | 
+|                                                                                                                                |
+|          El Gringo (Health 3): If you lose your health because of another player, you can draw a card from that player.        |
+|                                                                                                                                |
+|          Jesse Jones (Health 4): During the draw card phase, the first card can draw from any player's hand.                   |
+|                                                                                                                                |
+|          Jourdonnais (Health 4): When other players attack you with "Bang!" you have a chance to dodge the attack.             |
+|                                  If you equipped "Barrel!", there''s more chance you can dodge the attack.                     |
+|                                                                                                                                |
+|          Kit Carlson (Health 4): During the draw card phase, you can draw three cards, choose two of them be in your hand,     |
+|                                  then discard the other card.                                                                  |
+|                                                                                                                                |
+|          Lucky Duke (Health 4): You have a hight success rate of doing anything.                                               |
+|                                                                                                                                |
+|          Paul Regret (Health 3): Distance which every other player looks at you increase 1.                                    |
+|                                                                                                                                |
+|          Pedro Ramirez (Health 4): During the draw card phase, the first card can be drawn from the discard pile.              |
+|                                                                                                                                |
+|          Rose Doolan (Health 4): Distace you look at every player decrease 1.                                                  |
+|                                                                                                                                |
+|          Sid Ketchum (Health 4): You can discard two of your hand to heal one health point.                                    |
+|                                  The timing to use the skill is like "Beer".                                                   |
+|                                                                                                                                |
+|          Slab the Killer (Health 4): If you play "Bang!" to other players, they have to play two "Miss!" to avoid the attack.  |
+|                                      If they succeed to dodge the attack with barrel, they still need to play a "Miss!".       |
+|                                                                                                                                |
+|          Suzy Lafayette (Health 4): When there's no card in you hand, you can draw a card from the deck.                       |
+|                                     You cannot draw cards during the duel.                                                     |
+|                                                                                                                                |
+|          Vulture Sam (Health 4): When the other player is eliminated, you can add their equipment and hand to your hand.       |
+|                                                                                                                                |
+|          Willy the kid (Health 4): You can play as many "Bang!" as ou want in the same turn.                                   |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                                                |
+|                                                                                                        Page   9   of  9        |
+\================================================================================================================================/

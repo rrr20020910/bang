@@ -16,6 +16,8 @@
         fflush(stdin); \
         if (!(condition)) printf(format"\n", ##args);\
         else break; \
+        usleep(2000000); \
+        printf("\r"); \
     } \
 })
 

@@ -244,8 +244,6 @@ void draw_stage(List *game,Player *bot)
         discard_gear(game,bot,JAIL);
         return;
     }
-    
-    pile_remain_manage(game);
 
     //======Pedro_Ramirez=====
     if(bot->charater_ID == Pedro_Ramirez){
