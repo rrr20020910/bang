@@ -137,13 +137,11 @@ static void print_charater(int32_t x,int32_t y,Player *bot){
         case Vulture_Sam:     printf("Vulture_Sam"); break;
         case Willy_the_Kid:   printf("Willy_the_Kid"); break;
     }
-
-
 }
 
 
 //gear
-static void print_player_visual(int32_t x,int32_t y,Player *bot){
+static void print_player_visual(int32_t x,int32_t y,List *game,Player *bot){
 
     print_frame(x,y,35,13);
 
@@ -168,7 +166,7 @@ static void print_player_visual(int32_t x,int32_t y,Player *bot){
     gotoxy(b_x+1,b_y+1);
     printf("/ | \\");
     gotoxy(b_x,b_y+2);
-    printf("(~ X ~)");
+    printf("(~ %d ~)",get_distance(game->current_player,bot));
     gotoxy(b_x+1,b_y+3);
     printf("\\_|_/");
     
@@ -329,7 +327,8 @@ static void print_next_turn(int32_t x,int32_t y)
     printf("/  End_turn [_9_] ");
 }
 
-void print_system_msg(int32_t mode,char* str) //mode=0 : read to sys_log, otherwise : print system info
+//mode=0 : read to sys_log, otherwise : print system info
+void print_system_msg(int32_t mode,char* str) 
 {
     int32_t x = 81,y = 23;
     static char **sys_log = NULL;
@@ -346,8 +345,10 @@ void print_system_msg(int32_t mode,char* str) //mode=0 : read to sys_log, otherw
     {
         for(int i=SYS_BAR_ROW-1;i>0 ;i--)
         {
+            memset(&(sys_log[i]),0,SYS_MSG_LENGTH);
             strncpy(sys_log[i],sys_log[i-1],strlen(sys_log[i-1]));
         }
+        memset(&(sys_log[0]),0,SYS_MSG_LENGTH);
         strncpy(sys_log[0],str,strlen(str));
       
     }
@@ -397,7 +398,7 @@ void print_board(List *game,Player *bot)
     
     while(current != bot)
     {
-        print_player_visual(player_pos[count-1][0], player_pos[count-1][1],current);
+        print_player_visual(player_pos[count-1][0], player_pos[count-1][1],game,current);
         gotoxy(player_pos[count-1][0]+27, player_pos[count-1][1]+12);
         printf("[_%d_]",count);
         
