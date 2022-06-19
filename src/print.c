@@ -176,7 +176,11 @@ static void print_charater(int32_t x,int32_t y,Player *bot){
 //gear
 static void print_player_visual(int32_t x,int32_t y,List *game,Player *bot){
 
+    if(bot == game->current_player){
+        printf("\033[1;32m");
+    }
     print_frame(x,y,35,13);
+    printf("\033[0m");
 
     //name
     gotoxy(x+2,y+1);
@@ -199,7 +203,7 @@ static void print_player_visual(int32_t x,int32_t y,List *game,Player *bot){
     gotoxy(b_x+1,b_y+1);
     printf("/ | \\");
     gotoxy(b_x,b_y+2);
-    printf("(~ %d ~)",get_distance(game->current_player,bot));
+    printf("(~ %d ~)",get_distance(bot,game->current_player));
     gotoxy(b_x+1,b_y+3);
     printf("\\_|_/");
     
