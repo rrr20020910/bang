@@ -17,3 +17,4 @@ void build_pile(List *game);
 // check discard pile need to transfer to pile and shuffle
 void pile_remain_manage(List *game);
 void heal(Player *bot);
+char *card_name(int32_t card_ID);

@@ -6,7 +6,7 @@
 
 // play card       ||     
 //=================\/===
-static char *card_name(int32_t card_ID)
+char *card_name(int32_t card_ID)
 {
     char *name[CARD_TPYE] = {
         BANG_NAME,
@@ -48,13 +48,14 @@ static int32_t play_specify_card(List *game,Player *bot,int32_t card_id)
         {
             return 0;
         }
+        SYS_BAR_PRINT("%s use Calamity_Janet skill",bot->user_name);
     }
     //===============================
     else if(bot->hand_card[sel].card_ID != card_id)
     {
         return 0;
     }
-
+    SYS_BAR_PRINT("%s play %s as reaction",bot->user_name,card_name(card_id));
     Card *current = &(bot->hand_card[sel]);
     game->discard_pile[game->discard_pos] = *current;
     game->discard_pos++;
@@ -71,11 +72,11 @@ static int32_t play_specify_card(List *game,Player *bot,int32_t card_id)
     {
         if(bot->cards_num == 0)
         {
+            SYS_BAR_PRINT("%s use Suzy_Lafayette skill draw a card",bot->user_name);
             get_card(draw(game),bot);
         }
     }
     //=========================
-    
     
     return 1;
 }
@@ -88,6 +89,8 @@ Card *discard_random(List *game,Player *bot)
     int32_t random_card = rand()%(bot->cards_num); 
     
     Card *discard_card = &bot->hand_card[random_card];
+    
+    SYS_BAR_PRINT("%s discard %s",bot->user_name,card_name(bot->hand_card[random_card].card_ID));
     
     for(int i=random_card;i<(bot->cards_num);i++)
     {
@@ -102,6 +105,7 @@ Card *discard_random(List *game,Player *bot)
     {
         if(bot->cards_num == 0)
         {
+            SYS_BAR_PRINT("%s use Suzy_Lafayette skill draw a card",bot->user_name);
             get_card(draw(game),bot);
         }
     }
@@ -126,10 +130,10 @@ int32_t gear_check(Player *bot,int32_t gear_ID)
 //=================\/===
 static void die(List *game,Player *bot)
 {
-    SYS_BAR_PRINT("%s has been slain!!",bot->user_name); //TODO: add charcter name
+    SYS_BAR_PRINT("\033[1;31m%s has been slain!!\033[0m",bot->user_name);
     if(bot == game->next)
     {
-        SYS_BAR_PRINT("Sheriff DIE!!\n"); //TODO: add gameover message
+        SYS_BAR_PRINT("Sheriff DIE!!\n");
         if((game->players_num == 2) && (bot->next->role_ID == RENEGADE))
         {
             game->win_role = RENEGADE;
@@ -155,9 +159,11 @@ static void die(List *game,Player *bot)
     if(current->charater_ID == Vulture_Sam)
     {
         for(int i=0;i<bot->cards_num;i++){
+            SYS_BAR_PRINT("%s use Vulture_Sam get card from %s!!",current->user_name,bot->user_name);
             get_card(&bot->hand_card[i],current);
         }
         for(int i=0;i<bot->gear_num;i++){
+            SYS_BAR_PRINT("%s use Vulture_Sam get card from %s!!",current->user_name,bot->user_name);
             get_card(&bot->gear[i],current);
         }
     }
@@ -196,21 +202,21 @@ void heal(Player *bot)
 void damg(List *game,Player *bot)
 {
     bot->bullets--;
-    
+    SYS_BAR_PRINT("%s take one damg",bot->user_name);
     //======Bart_Cassidy======
     if(bot->charater_ID == Bart_Cassidy){
+        SYS_BAR_PRINT("%s use Bart_Cassidy get a card",bot->user_name);
         get_card(draw(game),bot);
     }
     //========================
     
     //=======El_Gringo=======
     if(bot->charater_ID == El_Gringo){
+        SYS_BAR_PRINT("%s use El_Gringo get card from %s",bot->user_name,game->current_player->user_name);
         get_card(discard_random(game,game->current_player),bot);
     }
     //========================
-    
-    
-    
+
     if(bot->bullets <= 0)
     {
         Player *current = bot->next;
@@ -288,15 +294,18 @@ static int32_t Bang(List *game,Player *bot)
     Player *target = select_range_player(game,bot,get_player_range(bot));
     if(target == NULL)
     {
-        INFO_MSG_PRINT("No, It's too far!! Your distance is not enough to Bang target!!");
+        WARNING_MSG_PRINT("No, It's too far!! Your distance is not enough to Bang target!!");
         usleep(2000000);
         return 1;
     }
+    
+    SYS_BAR_PRINT("%s play Bang! shoot %s",bot->user_name,target->user_name);
     
     if(gear_check(target,BARREL))
     {
         //======Lucky_Duke=====
         if(bot->charater_ID == Lucky_Duke){
+            SYS_BAR_PRINT("%s use Lucky_Duke double check!",bot->user_name);
             Miss_flag++;
         }
         //=======================
@@ -317,6 +326,7 @@ static int32_t Bang(List *game,Player *bot)
     }
     //======Slab_the_Killer=====
     if(bot->charater_ID == Slab_the_Killer){
+        SYS_BAR_PRINT("%s is Slab_the_Killer target have to play double miss",bot->user_name);
         if(Miss_flag == 1){
             Miss_flag--;
             if(play_specify_card(game,target,102))
@@ -331,12 +341,16 @@ static int32_t Bang(List *game,Player *bot)
         damg(game,target);
     }
     
-    if(!gear_check(bot,VOLANIC))
+     game->bang_play++;
+    
+    if(gear_check(bot,VOLANIC))
     {
-        game->bang_play++;
+        SYS_BAR_PRINT("%s has VOLANIC can still play Bang",bot->user_name);
+        game->bang_play = 0;
     }
     //======Willy_the_Kid=====
-    if(bot->charater_ID == Willy_the_Kid){
+    else if(bot->charater_ID == Willy_the_Kid){
+        SYS_BAR_PRINT("%s is Willy_the_Kid can still play Bang",bot->user_name);
         game->bang_play = 0;
     }
     //========================
@@ -345,6 +359,7 @@ static int32_t Bang(List *game,Player *bot)
 
 static int32_t Wells_Fargo(List *game,Player *bot)
 {
+    SYS_BAR_PRINT("%s play Wells_Fargo draw three cards",bot->user_name);
     get_card(draw(game),bot);
     get_card(draw(game),bot);
     get_card(draw(game),bot);
@@ -353,6 +368,7 @@ static int32_t Wells_Fargo(List *game,Player *bot)
 
 static int32_t Stagecoach(List *game,Player *bot)
 {
+    SYS_BAR_PRINT("%s play Wells_Fargo draw two cards",bot->user_name);
     get_card(draw(game),bot);
     get_card(draw(game),bot);
     return 0;
@@ -360,6 +376,7 @@ static int32_t Stagecoach(List *game,Player *bot)
 
 static int32_t Salon(List *game,Player *bot)
 {
+    SYS_BAR_PRINT("%s play Saloon heal every one bullet",bot->user_name);
     Player *current = bot;
     do
     {
@@ -373,22 +390,28 @@ static int32_t Miss(List *game,Player *bot)
 {
     //======Calamity_Janet=====
     if(bot->charater_ID == Calamity_Janet){
+        SYS_BAR_PRINT("%s is Calamity_Janet play miss as Bang!",bot->user_name);
         if(Bang(game,bot)){
             return 1;
         }
         return 0;
     }
     //========================
-    WARNING_MSG_PRINT("You can't Player miss\n");
+    WARNING_MSG_PRINT("You can't play miss\n");
     return 1;
 }
 
 static int32_t Beer(List *game,Player *bot)
 {
+    if(bot->bullets == (bot->charater_ID/100)){
+        WARNING_MSG_PRINT("You don't need play beer now\n");
+        return 1;
+    }
     if(game->players_num != 2)
     {
         heal(bot);
     }
+    SYS_BAR_PRINT("%s play beer bullets+=1 ",bot->user_name);
     return 0;
 }
 
@@ -401,11 +424,14 @@ static int32_t Panic(List *game,Player *bot)
         return 1;
     }
     get_card(discard_random(game,target),bot);
+    
+    SYS_BAR_PRINT("%s play panic get a card from %s",bot->user_name,target->user_name);
     return 0;
 }
 
 static int32_t General_Store(List *game,Player *bot)
 {
+    SYS_BAR_PRINT("%s play General_Store",bot->user_name);
     Card *store[game->players_num];
     for(int i=0;i<(game->players_num);i++)
     {
@@ -431,11 +457,13 @@ static int32_t General_Store(List *game,Player *bot)
             }
         }
         gotoxy(2,16);
-        printf("please select a card(General_Store): ");
+        printf("please select a card(General_Store) %s: ",current->user_name);
         int32_t sel = 0;
         scanf("%d",&sel);
         sel--;
         get_card(store[sel],current);
+        
+        SYS_BAR_PRINT("%s get a card from General_Store",current->user_name);
         
         for(int j=sel;j<(game->players_num)-i;j++)
         {
@@ -450,6 +478,11 @@ static int32_t General_Store(List *game,Player *bot)
 static int32_t Duel(List *game,Player *bot)
 {
     Player *target = select_other_player(game,bot);
+    if(target == NULL){
+        return 1;
+    }
+    
+    SYS_BAR_PRINT("%s duel %s",bot->user_name,target->user_name);
     
     if(target == NULL){
         return 1;
@@ -479,6 +512,7 @@ static int32_t Duel(List *game,Player *bot)
 
 static int32_t Gatling(List *game,Player *bot)
 {
+    SYS_BAR_PRINT("%s shoot every one play miss to avoid damg",bot->user_name);
     Player *current = bot;
     current = current->next;
     
@@ -495,6 +529,7 @@ static int32_t Gatling(List *game,Player *bot)
 
 static int32_t Indians(List *game,Player *bot)
 {
+    SYS_BAR_PRINT("%s play Indians play bang to avoid damg",bot->user_name);
     Player *current = bot;
     current = current->next;
     
@@ -513,6 +548,7 @@ static int32_t Cat_Balou(List *game,Player *bot)
 {
     Player *target = select_other_player(game,bot);
     
+
     if(target == NULL){
         return 1;
     }
@@ -527,12 +563,14 @@ static int32_t Cat_Balou(List *game,Player *bot)
     
     if(sel == 1)
     {
+        SYS_BAR_PRINT("%s play Cat_Balou %s discard hand card",bot->user_name,target->user_name);
         discard_random(game,target);
         return 0;
     }
     sel-=2;
     if(sel <= bot->gear_num)
     {
+        SYS_BAR_PRINT("%s play Cat_Balou %s discard %s",bot->user_name,target->user_name,card_name(target->gear[sel].card_ID));
         discard_gear(game,target,target->gear[sel].card_ID);
         return 0;
     }
@@ -547,14 +585,17 @@ static int32_t Jail(List *game,Player *bot)
     Player *target = select_other_player(game,bot);
     
     if(target == NULL){
+        WARNING_MSG_PRINT("choose right target\n");
         return 1;
     }
     
     if(gear_check(target,game->current_card->card_ID))
     {
+        WARNING_MSG_PRINT("%s already in Jail\n",target->user_name);
         return 1;
     }
     
+    SYS_BAR_PRINT("%s play Jail lock %s in Jail",bot->user_name,target->user_name);
     Card *equip = game->current_card;
     target->gear[target->gear_num] = *equip;
     target->gear_num++;
@@ -563,6 +604,7 @@ static int32_t Jail(List *game,Player *bot)
 
 int32_t Dynamite(List *game,Player *bot)
 {
+    SYS_BAR_PRINT("%s equip Dynamite",bot->user_name);
     bot->gear[bot->gear_num] = *game->current_card;
     bot->gear_num++;
     return 0;
@@ -578,10 +620,11 @@ static int32_t Barrel(List *game,Player *bot)
             bot->gear_num ++;
             return 0;
         }
-        printf("you already have BARREL");
+        WARNING_MSG_PRINT("you already have Barrel play again to equip\n");
         game->gear_change = BARREL;
         return 1;
     }
+    SYS_BAR_PRINT("%s equip Barrel",bot->user_name);
     bot->gear[bot->gear_num] = *game->current_card;
     bot->gear_num ++;
     
@@ -601,13 +644,15 @@ static int32_t Gun(List *game,Player *bot)
                 bot->gear_num ++;
                 return 0;
             }
-            printf("you already have BARREL");
+            WARNING_MSG_PRINT("you already have gun play again to equip\n");
             game->gear_change = i;
             return 1;
         }
         
     }
+
     bot->gear[bot->gear_num] = *game->current_card;
+    SYS_BAR_PRINT("%s equip %s",bot->user_name,card_name(bot->gear[bot->gear_num].card_ID));
     bot->gear_num ++;
     return 0;
 }
@@ -625,13 +670,14 @@ static int32_t Horse(List *game,Player *bot)
                 bot->gear_num ++;
                 return 0;
             }
-            printf("you already have BARREL");
+            WARNING_MSG_PRINT("you already have horse play again to equip\n");
             game->gear_change = i;
             return 1;
         }
         
     }
     bot->gear[bot->gear_num] = *game->current_card;
+    SYS_BAR_PRINT("%s equip %s",bot->user_name,card_name(bot->gear[bot->gear_num].card_ID));
     bot->gear_num ++;
     return 0;
 }
