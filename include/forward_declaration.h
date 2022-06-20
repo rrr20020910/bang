@@ -192,6 +192,8 @@ typedef struct _sPlayer
     int32_t avata;
     
     int32_t aggressine;
+
+    int32_t isBot;
     
     struct _sPlayer *next;
 }Player;

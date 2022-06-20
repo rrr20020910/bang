@@ -3,13 +3,13 @@
 
 #define MAX_NAME_LEN 10
 
-void start_of_the_game(List *game,char ***player_name)
+void start_of_the_game(List *game,char ***player_name,int32_t **cpu_list)
 {
-    print_menu(game,player_name);
+    print_menu(game,player_name,cpu_list);
     return;
 }
 
-void menu_induction_control(List *game,char ***player_name)
+void menu_induction_control(List *game,char ***player_name,int32_t **cpu_list)
 {
     int32_t menu_induction_choice=0;
     printf("Please enter your choice: ");
@@ -19,17 +19,17 @@ void menu_induction_control(List *game,char ***player_name)
     {
         case 1:
         {
-            menu_game_settings(game,player_name);
+            menu_game_settings(game,player_name,cpu_list);
             return;
         }
         case 2:
         {
             WARNING_MSG_PRINT("Please look forward to next version:TEH_WILD_WEST! would bring more feature");
-            print_menu(game,player_name);
+            print_menu(game,player_name,cpu_list);
         }
         case 3:
         {
-            print_rules(game,player_name);
+            print_rules(game,player_name,cpu_list);
             return;
         }
         case 4:
@@ -41,13 +41,13 @@ void menu_induction_control(List *game,char ***player_name)
         }
         default:
         {
-            print_menu(game,player_name);
+            print_menu(game,player_name,cpu_list);
              
         }
     }
 }
 
-void print_menu(List *game,char ***player_name)
+void print_menu(List *game,char ***player_name,int32_t **cpu_list)
 {
     FILE *pMenu;
     
@@ -69,11 +69,11 @@ void print_menu(List *game,char ***player_name)
     }
     fclose(pMenu);
     printf("\n\n\n\n\n");
-    menu_induction_control(game,player_name);
+    menu_induction_control(game,player_name,cpu_list);
     return;
 }
 
-void print_rules(List *game,char ***player_name)
+void print_rules(List *game,char ***player_name,int32_t **cpu_list)
 {
     FILE *pRules;
     char Rule_str[200];
@@ -131,12 +131,12 @@ void print_rules(List *game,char ***player_name)
         if(Rule_page > 9) Rule_page=1;
         if(Rule_page == 0) Rule_page=9;
     }
-    print_menu(game,player_name);
+    print_menu(game,player_name,cpu_list);
     return;
 
 }
 
-void menu_game_settings(List *game,char ***player_name)
+void menu_game_settings(List *game,char ***player_name,int32_t **cpu_list)
 {
     ////////Number of Players
     int32_t player_number=0;
@@ -160,7 +160,9 @@ void menu_game_settings(List *game,char ***player_name)
     //printf("Player number: %d\n",game->players_num);
 
     *player_name = (char**)calloc(player_number,sizeof(char**));
-    
+    *cpu_list = (int32_t*)calloc(player_number,sizeof(int32_t*));
+    char c = 0;
+
     char *str_tmp = malloc(sizeof(char)*1000);
     printf("\n=================================\n");
     for(int i=0;i<player_number;i++)
@@ -178,7 +180,17 @@ void menu_game_settings(List *game,char ***player_name)
             }
             //printf("%s\n",str_tmp);
             strncpy((*player_name)[i],str_tmp,10);
-            
+            printf("Is it CPU? (y or n)? ");
+            scanf("%c",&c);
+            fflush(stdin);
+            if(c == 'y')
+            {
+                (*cpu_list)[i] = 1;
+            }
+            else
+            {
+                (*cpu_list)[i] = 0;
+            }
             //printf("Player name: %s\n",(*player_name)[i]);
             break;
         }

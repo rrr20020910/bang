@@ -17,7 +17,8 @@ int main()
     
 
     char **player_name = NULL;
-    start_of_the_game(&game,&player_name);
+    int32_t *cpu_list = NULL;
+    start_of_the_game(&game,&player_name,&cpu_list);
     
     Player bot[game.players_num];
     
@@ -49,6 +50,7 @@ int main()
     {
         memset(&bot[i],0,sizeof(Player));
         strncpy(bot[i].user_name,player_name[i],strlen(player_name[i]));
+        bot[i].isBot = cpu_list[i];
         build_list(&game,bot[i]);
     }
 
