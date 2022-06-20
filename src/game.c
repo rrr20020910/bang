@@ -287,7 +287,13 @@ void draw_stage(List *game,Player *bot)
         printf("You are Pedro_Ramirez, do you want to draw from discard pile?[_8_]");
         
         int32_t sel = 0;
-        CHECK_UNTIL(sel==8,sel,"No next time!");
+        if(bot->isBot){
+            sel == 8;
+        }
+        else
+        {
+            CHECK_UNTIL(sel==8,sel,"No next time!");
+        }
         if(sel == 8){
             get_card(&game->discard_pile[game->discard_pos-1],bot);
             memset(&game->discard_pile[game->discard_pos-1],0,sizeof(Card));
@@ -310,7 +316,13 @@ void draw_stage(List *game,Player *bot)
     if(bot->charater_ID == Jesse_Jones){
         printf("You are Jesse_Jones, do you want to draw from other player?[_8_]");
         int32_t sel = 0;
-        CHECK_UNTIL(sel==8,sel,"No next time!");
+        if(bot->isBot){
+            sel == 8;
+        }
+        else
+        {
+            CHECK_UNTIL(sel==8,sel,"No next time!");
+        }
         if(sel == 8){
             Player *target = select_other_player(game,bot);
             get_card(discard_random(game,target),bot);
