@@ -15,3 +15,5 @@ void draw_stage(List *game,Player *bot);
 void discard_stage(List *game,Player *bot);
 
 void win_message(List game);
+
+int32_t get_Bot_move(List *game,Player *bot);

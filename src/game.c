@@ -64,14 +64,14 @@ int32_t get_Bot_move(List *game,Player *bot)
     
     play_card(game,bot,sel);
 
-    if(cards_num < bot->bullets){
+    if(bot->cards_num < bot->bullets){
         return 1;
     }
     if(rand()%3 == 0)
     {
         return 1;
     }
-    
+    return 0;
 }
 
 int32_t get_player_move(List *game,Player *bot)
