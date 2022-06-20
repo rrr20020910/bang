@@ -79,7 +79,7 @@ int main()
                 }
             }
             
-            if(get_player_move(&game,current))
+            else if(get_player_move(&game,current))
             {
                 break;
             }

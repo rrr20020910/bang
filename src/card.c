@@ -525,6 +525,10 @@ static int32_t General_Store(List *game,Player *bot)
         gotoxy(2,16);
         printf("please select a card(General_Store) %s: ",current->user_name);
         int32_t sel = 0;
+        srand(time(NULL));
+        if(current->isBot){
+            sel = rand()%(game->players_num-i)+1;
+        }
         CHECK_UNTIL(sel>=1&&sel<=game->players_num-i,sel,"please select a valid card");
         sel--;
         get_card(store[sel],current);
@@ -626,7 +630,15 @@ static int32_t Cat_Balou(List *game,Player *bot)
     }
     printf("Please enter selection :");
     int32_t sel = 0;
-    CHECK_UNTIL(sel>=1&&sel<=7,sel,"please select a valid player");
+    if(bot->isBot)
+    {
+        sel =1;
+    }
+    else
+    {
+        CHECK_UNTIL(sel>=1&&sel<=7,sel,"please select a valid player");
+    }
+    
     
     if(sel == 1)
     {
