@@ -8,6 +8,10 @@
 
 #define MAX_GEAR_EQUIP 6
 
+#define DYNAMITE_CHECK 0
+#define RED_CHECK      1
+#define HEART          2
+
 #define SHERIFF        1
 #define DEPUTY_SHERIFF 2
 #define OUTLAW         3
@@ -115,6 +119,12 @@
 #define WINCHESTER  222
 #define WINCHESTER_NAME "Winchester" 
 
+#define AGGRESSIVE 1
+#define AOE_AGGRESSIVE 2
+#define FRIENDLY 3
+#define AOE_FRIENDLY 4
+#define SELF_AFFECT 5
+
 #define SIDE 0 //range == 0 means two sides
 
 #define SYS_BAR_ROW 15
@@ -125,6 +135,7 @@
 #define CARD_WIDTH   17
 #define CARD_LENGTH  12
 #define CARD_IMG_FILEPATH "./assets/card-image.txt"
+#define AVATA_FILEPATH "./assets/avata.txt"
 
 #define SYS_BAR_ROW 15
 #define SYS_MSG_LENGTH 64
@@ -160,6 +171,7 @@ typedef struct _sCard
     char name[32];
     int32_t card_ID;
     int32_t (*ability)(List*,Player*);
+    int32_t card_type;
     int32_t suit;
     int32_t face;
 }Card;
@@ -176,6 +188,10 @@ typedef struct _sPlayer
     
     int32_t role_ID;
     int32_t charater_ID;
+    
+    int32_t avata;
+    
+    int32_t aggressine;
     
     struct _sPlayer *next;
 }Player;

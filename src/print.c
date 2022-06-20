@@ -171,7 +171,28 @@ static void print_charater(int32_t x,int32_t y,Player *bot){
         case Willy_the_Kid:   printf("Willy_the_Kid"); break;
     }
 }
+void print_avata(int32_t x,int32_t y,Player *bot)
+{
+    FILE *pfile = NULL;
+    if((pfile=fopen(AVATA_FILEPATH,"r"))==NULL)
+    {
+        printf("can't open this file\n");
+        return;
+    }
+    int32_t pos = bot->avata; //0-19
+    
+    fseek(pfile,pos*3*10,SEEK_SET);
 
+    for(int i=0;i<3;i++)
+    {
+        char avata_pic[11] = {0};
+        fgets(avata_pic,11,pfile);
+        gotoxy(x,y+i);
+        printf("%s",avata_pic);
+    }
+    fclose(pfile);
+    return;
+}
 
 //gear
 static void print_player_visual(int32_t x,int32_t y,List *game,Player *bot){
@@ -226,20 +247,15 @@ static void print_player_visual(int32_t x,int32_t y,List *game,Player *bot){
     //role
     // print_role(x+11,y+4,bot);
     
-    int32_t r_x = x+11,r_y = y+4;
+    int32_t r_x = x+10,r_y = y+4;
     for(int i=0;i<4;i++)
     {
         gotoxy(r_x,r_y+i);
-        printf("[========]");
+        printf("[======]");
     }
     
     //avata
-    int32_t a_x = x,a_y = y-3;
-    for(int i=0;i<3;i++)
-    {
-        gotoxy(a_x,a_y+i);
-        printf("[------]");
-    }
+    print_avata(x,y-3,bot);
     
     //hand
     int32_t count = bot->cards_num;
@@ -301,20 +317,6 @@ void print_card_visual(int32_t x,int32_t y,Card print)
         printf("%s",card_pic);
     }
     printf("\033[0m\n");
-    
-    /* TODO: suit icon
-    () T
-   ()()T
-
-    /\ K
-   (__)K
-   
-   (\/)Q
-    \/ Q
-    
-    /\ 4
-    \/ 4
-    */
     
     if(print.card_ID != 0){
         
@@ -544,11 +546,7 @@ void print_board(List *game,Player *bot)
     //player info
     
     //avata
-    for(int i=0;i<3;i++)
-    {
-        gotoxy(118,40+i);
-        printf("[------]");
-    }
+    print_avata(118,40,bot);
     gotoxy(126,42);
     printf("_______________________________");
     

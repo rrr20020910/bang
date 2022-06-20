@@ -135,8 +135,10 @@ void set_role(List *game)
     for(int i=0;i<game->players_num;i++)
     {
         current->role_ID = role_list[i];
+        current->avata = rand()%20;
         current = current->next;
     }
+    
 }
 
 void set_character(List *game){
@@ -201,16 +203,30 @@ void draw_stage(List *game,Player *bot)
     
     if(gear_check(bot,DYNAMITE))
     {
-        int check = 0;
-        //======Lucky_Duke=====
-        if(bot->charater_ID == Lucky_Duke){
-            SYS_BAR_PRINT("%s use Lucky_Duke's great luck!",bot->user_name);
+        int32_t check = 0;
+        if(!check_card(game,DYNAMITE_CHECK))
+        {
+            SYS_BAR_PRINT("The dynamite not explode yet");
             check++;
+        }
+        //======Lucky_Duke=====
+        else if(bot->charater_ID == Lucky_Duke){
+            SYS_BAR_PRINT("%s use Lucky_Duke's great luck!",bot->user_name);
+            if(!check_card(game,DYNAMITE_CHECK)){
+                SYS_BAR_PRINT("Why don't it explode,something broken?");
+                check++;
+            }
         }
         //========================
         
         if(check == 0){
             damg(game,bot);
+            if(game->win_role ==0){
+                damg(game,bot);
+            }
+            if(game->win_role ==0){
+                damg(game,bot);
+            }
         }
 
         Card *current = &(bot->gear[0]);
@@ -223,18 +239,25 @@ void draw_stage(List *game,Player *bot)
     
     if(gear_check(bot,JAIL))
     {
-        int check = 0;
+        if(check_card(game,HEART))
+        {
+            discard_gear(game,bot,JAIL);
+            return;
+        }
         
         //======Lucky_Duke=====
         if(bot->charater_ID == Lucky_Duke){
             SYS_BAR_PRINT("%s use Lucky_Duke's great luck!'",bot->user_name);
-            check++;
+            if(check_card(game,HEART))
+            {
+                discard_gear(game,bot,JAIL);
+                return;
+            }
         }
         //========================
         
-        if(check == 0){
-            game->isInJail = 1;
-        }
+        SYS_BAR_PRINT("%s do something bad, lock in Jail go to hell",bot->user_name);
+        game->isInJail = 1;
         discard_gear(game,bot,JAIL);
         return;
     }
@@ -292,10 +315,11 @@ void draw_stage(List *game,Player *bot)
         
         SYS_BAR_PRINT("The Black_Jack's second card is %s",card_name(check->card_ID));
         get_card(check,bot);
+        if((check->suit == 3) || (check->suit == 4)){
+            SYS_BAR_PRINT("%s use Black_Jack's skill and  he can draw another card!",bot->user_name);
+            get_card(draw(game),bot);
+        }
         
-        SYS_BAR_PRINT("%s use Black_Jack's skill and  he can draw another card!",bot->user_name);
-        
-        get_card(draw(game),bot);
         return;
     }
     //========================

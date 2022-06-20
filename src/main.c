@@ -5,6 +5,7 @@
 #include "player.h"
 #include "card.h"
 #include "menu.h"
+#include "robot.h"
 
 int main()
 {   

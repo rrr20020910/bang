@@ -18,3 +18,4 @@ void build_pile(List *game);
 void pile_remain_manage(List *game);
 void heal(Player *bot);
 char *card_name(int32_t card_ID);
+int32_t check_card(List *game,int32_t condition);
