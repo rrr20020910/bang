@@ -49,11 +49,20 @@ int32_t get_distance(Player *bot1,Player *bot2)
 //=================\/===
 Player *select_other_player(List *game,Player *bot)
 {
+    
     Player *current = bot;
     
     printf("Please select a player:");
     int32_t sel = 0;
-    CHECK_UNTIL(sel>=1&&sel<=game->players_num-1,sel,"Please select a valid player");
+    srand(time(NULL));
+    if(bot->isBot)
+    {
+        sel = rand()%game->players_num;
+    }
+    else
+    {
+        CHECK_UNTIL(sel>=1&&sel<=game->players_num-1,sel,"Please select a valid player");
+    }
     
     if(sel > game->players_num || sel <= 0){
         return NULL;
@@ -132,6 +141,7 @@ Card *discard_gear(List *game,Player *bot,int32_t gear_ID)
 // discard         ||     
 //=================\/===
 
+
 int32_t get_temp_player_play(List *game,Player *bot)
 {
     while(1)
@@ -140,7 +150,17 @@ int32_t get_temp_player_play(List *game,Player *bot)
         print_board(game,bot);
         INFO_MSG_PRINT("Please select to discard:");
         int32_t sel=0;
-        CHECK_UNTIL((sel>=1 && sel<=7) || sel==9,sel,"Please input valid move!!");
+        
+        
+        srand(time(NULL));
+        if(bot->isBot)
+        {
+            sel = rand()%bot->cards_num;
+        }
+        else
+        {
+            CHECK_UNTIL((sel>=1 && sel<=7) || sel==9,sel,"Please input valid move!!");
+        }
         
         //0,7 page control
         if(sel == 0)
@@ -209,7 +229,6 @@ Card *select_discard(List *game,Player *bot)
     
     return discard_card;
 }
-
 
 
 
