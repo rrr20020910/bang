@@ -529,7 +529,10 @@ static int32_t General_Store(List *game,Player *bot)
         if(current->isBot){
             sel = rand()%(game->players_num-i)+1;
         }
-        CHECK_UNTIL(sel>=1&&sel<=game->players_num-i,sel,"please select a valid card");
+        else
+        {
+            CHECK_UNTIL(sel>=1&&sel<=game->players_num-i,sel,"please select a valid card");
+        }
         sel--;
         get_card(store[sel],current);
         

@@ -288,7 +288,7 @@ void draw_stage(List *game,Player *bot)
         
         int32_t sel = 0;
         if(bot->isBot){
-            sel == 8;
+            sel = 8;
         }
         else
         {
@@ -317,7 +317,7 @@ void draw_stage(List *game,Player *bot)
         printf("You are Jesse_Jones, do you want to draw from other player?[_8_]");
         int32_t sel = 0;
         if(bot->isBot){
-            sel == 8;
+            sel = 8;
         }
         else
         {
