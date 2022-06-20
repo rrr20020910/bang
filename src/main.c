@@ -71,10 +71,17 @@ int main()
         {
             print_board(&game,current);
             
+            if(current->isBot){
+                if(get_Bot_move(&game,current)){
+                    break;
+                }
+            }
+            
             if(get_player_move(&game,current))
             {
                 break;
             }
+            
             if(game.win_role != 0)
             {
                 break;

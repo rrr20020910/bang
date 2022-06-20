@@ -54,6 +54,26 @@ int32_t play_card(List *game,Player *bot,int32_t sel)
     return 0;
 }
 
+int32_t get_Bot_move(List *game,Player *bot)
+{
+    srand(time(NULL));
+    
+    int32_t sel=rand()%bot->cards_num;
+    
+    usleep(10000);
+    
+    play_card(game,bot,sel);
+
+    if(cards_num < bot->bullets){
+        return 1;
+    }
+    if(rand()%3 == 0)
+    {
+        return 1;
+    }
+    
+}
+
 int32_t get_player_move(List *game,Player *bot)
 {
     //get select
