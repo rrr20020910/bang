@@ -12,3 +12,6 @@
 
 # c object directory
 obj
+
+# binary directory
+bin
