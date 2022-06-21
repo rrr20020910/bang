@@ -29,17 +29,32 @@ If you want to enjoy music in game
 (play ./assets/background.mp3 -q repeat 32) & ./bin/main
 ```
 
-In Docker version, to initialize docker environment
-```
-docker build -t bang . 
-docker create -it --name bang-env bang
-```
+In Docker version, to initialize docker environment  
+
+- Using Dockerfile to create image 
+
+    ```bash
+    docker build -t bang . 
+    ```
+- Create container
+
+    ```bash
+    docker create -it --name bang-env bang
+    ```
 
 Play Bang in docker environment
-```
-docker start bang-env
-docker exec -it bang-env make;./bin/main;
-```
+
+- Run container
+
+    ```
+    docker start bang-env 
+    ```
+- Play bang
+
+    ```
+    docker exec -it bang-env make;./bin/main;
+    ```
+    
 > note: the music version may not work because your audio device is not connect to docker container.
 
 ## Other Info
